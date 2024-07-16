@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  name           String        @db.VarChar(100)
+  username       String        @db.VarChar(100)
+  email          String        @db.VarChar(100)
+  password       String        @db.VarChar(100)
+  isVerfied      Boolean       @default(false)
+  profileImage   String?       @db.VarChar(100)
+  status         Boolean?      @default(true)
+  isPinProtected Boolean?      @default(false)
+  pin            String?       @db.VarChar(10)
+  country        String?       @default("pk") @db.VarChar(10)
+  currency       String?       @default("pkr") @db.VarChar(10)
+  createdAt      DateTime?     @default(now())
+  Category       Category[]
+  Account        Account[]
+  Transaction    Transaction[]
+  Goal           Goal[]
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  isPrimary    Boolean?      @default(false)
+  categoryName String        @db.VarChar(100)
+  categoryType CategoryType
+  icon         String        @db.VarChar(50)
+  status       Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  addedBy      User?         @relation(fields: [userId], references: [id])
+  userId       Int?
+  Transaction  Transaction[]
+  Goal         Goal[]
+}
+
+model Account {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  type        AccountType
+  balance     Float         @default(0)
+  status      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  addedBy     User          @relation(fields: [userId], references: [id])
+  userId      Int
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id          Int             @id @default(autoincrement())
+  type        TransactionType
+  description String
+  tags        String
+  amount      Float
+  createdAt   DateTime        @default(now())
+  categoryId  Int
+  accountId   Int
+  userId      Int
+  category    Category        @relation(fields: [categoryId], references: [id])
+  account     Account         @relation(fields: [accountId], references: [id])
+  addedBy     User            @relation(fields: [userId], references: [id])
+}
+
+model Goal {
+  id            Int       @id @default(autoincrement())
+  type          GoalTypes
+  name          String    @db.VarChar(100)
+  description   String
+  targetAmount  Float
+  currentAmount Float
+  fromDate      DateTime
+  toDate        DateTime
+  isAchieved    Boolean
+  isRecuring    Boolean
+  recuringFrom  DateTime
+  recuringTo    DateTime
+  createdAt     DateTime  @default(now())
+  category      Category  @relation(fields: [categoryId], references: [id])
+  addedBy       User      @relation(fields: [userId], references: [id])
+  categoryId    Int
+  userId        Int
+}
+
+enum GoalTypes {
+  SAVINGS
+  BUDGET
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  PEOPLE
+}
+
+enum AccountType {
+  CASH
+  BANK
+}
+
+enum CategoryType {
+  EXPENSE
+  INCOME
+}
