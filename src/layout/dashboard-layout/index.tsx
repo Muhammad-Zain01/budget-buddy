@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar";
 import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
 import Providers from "./components/providers";
+import { AlertModal } from "@/components/alert-modal";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </Providers>
+      <AlertModal />
     </GeneralLayout>
   );
 };

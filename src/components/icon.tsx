@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type ComponentProps = {
   icon: string;
   onClick?: () => void;
@@ -13,7 +15,7 @@ export const Icon: React.FC<ComponentProps> = ({
     <img
       onClick={onClick}
       src={`/icons/${icon}.png`}
-      className={className}
+      className={clsx(className, "dark:brightness-0 dark:invert")}
       alt={icon}
     />
   );

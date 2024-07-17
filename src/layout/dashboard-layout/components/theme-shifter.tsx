@@ -12,10 +12,10 @@ const ThemeShifter = () => {
       className="rounded-full"
       aria-label="Search"
     >
-      {theme == "light" ? (
-        <Moon className="h-5 w-5" onClick={() => setTheme("dark")} />
-      ) : (
+      {theme == "dark" ? (
         <Sun className="h-5 w-5" onClick={() => setTheme("light")} />
+      ) : (
+        <Moon className="h-5 w-5" onClick={() => setTheme("dark")} />
       )}
     </Button>
   );

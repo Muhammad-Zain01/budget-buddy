@@ -38,7 +38,6 @@ const LoginForm = () => {
   const router = useRouter();
 
   const onSubmit = async (value: any) => {
-    console.log(value);
     const response = await signIn("credentials", {
       username: value.username,
       password: value.password,

@@ -8,8 +8,20 @@ import {
 import { Button } from "../ui/button";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Icon } from "../icon";
+import { Category } from "@/models";
+import useAlertDialoag from "@/hooks/useAlertDialog";
+import { Category as CategoryService } from "@/lib/services/category";
+import useModalStore from "@/store/modal";
 
-const CategoryCard = ({ category }: any) => {
+type ComponentProps = {
+  category: Category;
+  onDelete: (id: number) => void;
+};
+const CategoryCard: React.FC<ComponentProps> = ({ category, onDelete }) => {
+  const { open } = useAlertDialoag();
+  const setAddCategoryModal = useModalStore(
+    (state) => state.setAddCategoryModal
+  );
   return (
     <Card className="relative rounded-md dark:bg-muted">
       <div className="flex items-center py-5">
@@ -21,7 +33,7 @@ const CategoryCard = ({ category }: any) => {
             />
           </div>
           <div className="text-gray-600 dark:text-gray-100 text-[14px] mt-1">
-            {category.title}
+            {category.categoryName}
           </div>
         </div>
         <DropdownMenu>
@@ -35,8 +47,26 @@ const CategoryCard = ({ category }: any) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                setAddCategoryModal(true, category);
+              }}
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                open(
+                  "Are you sure?",
+                  "Do you want to delete this category?",
+                  () => onDelete(category.id)
+                );
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

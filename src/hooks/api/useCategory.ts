@@ -1,23 +1,22 @@
+import request from "@/lib/request";
+import { Category, Response } from "@/models";
+import { useQuery } from "@tanstack/react-query";
+
 const useCategory = () => {
-  const getAllCategoryByUser = async (userId: string) => {
-    return await prisma.category.findMany({
-      where: {
-        OR: [{ isPrimary: true }, { userId: userId }],
-      },
-      select: {
-        id: true,
-        isPrimary: true,
-        categoryName: true,
-        categoryType: true,
-        icon: true,
-        status: true,
+  const getCategory = async () => {
+    const res = await request("/api/category/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
     });
+    return await res.json();
   };
 
-  return {
-    getAllCategoryByUser,
-  };
+  return useQuery<Response<Category[]>>({
+    queryKey: ["category"],
+    queryFn: getCategory,
+  });
 };
 
 export default useCategory;

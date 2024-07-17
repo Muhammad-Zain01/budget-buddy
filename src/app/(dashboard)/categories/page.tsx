@@ -9,15 +9,36 @@ import { PrimaryCategories } from "@/constants/categories";
 import AddButton from "@/components/add-button";
 import CategoryModal from "@/components/category/category-modal";
 import useModalStore from "@/store/modal";
+import useCategory from "@/hooks/api/useCategory";
+import { Category } from "@/models";
+import { Category as CategoryServices } from "@/lib/services/category";
+import { useToast } from "@/components/ui/use-toast";
+import useAlertDialoag from "@/hooks/useAlertDialog";
 
 export default function CategoryPage() {
   const [activeTab, setActiveTab] = useState("income");
+  const { data, isLoading, isError, refetch } = useCategory();
+  const { close } = useAlertDialoag();
+  const { toast } = useToast();
+
   const setAddCategoryModal = useModalStore(
     (state) => state.setAddCategoryModal
   );
-  const categories = PrimaryCategories;
+
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
+  };
+
+  const onDelete = async (id: number) => {
+    const response = await CategoryServices.remove(id);
+    if (response.status) {
+      toast({
+        title: "Category Deleted",
+        description: "Category has been deleted successfully",
+      });
+      refetch();
+    }
+    close();
   };
 
   return (
@@ -57,11 +78,20 @@ export default function CategoryPage() {
             </div>
           </Tabs>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {categories
-              .filter((category) => category.type == activeTab)
-              .map((category, index) => (
-                <CategoryCard key={index} category={category} />
-              ))}
+            {data &&
+              data?.data
+                .filter(
+                  (category: Category) =>
+                    category.categoryType.toLowerCase() ==
+                    activeTab.toLowerCase()
+                )
+                .map((category: Category) => (
+                  <CategoryCard
+                    key={category.id}
+                    category={category}
+                    onDelete={onDelete}
+                  />
+                ))}
           </div>
         </div>
       </main>

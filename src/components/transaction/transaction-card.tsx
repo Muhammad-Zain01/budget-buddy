@@ -19,7 +19,7 @@ const TransactionCard = ({ transaction }: any) => {
             <div className="bg-accent p-2 rounded-full">
               <Icon
                 icon={transaction.icon}
-                className="w-8 h-8 text-accent-foreground dark:brightness-0 dark:invert"
+                className="w-8 h-8 text-accent-foreground "
               />
             </div>
 

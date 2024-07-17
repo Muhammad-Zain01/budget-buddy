@@ -1,5 +1,6 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { hash, compare } from "bcryptjs";
+import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 export async function HashPassword(password: string) {
@@ -18,7 +19,11 @@ export async function VerifyPassword(password: string, hashedPassword: string) {
   }
 }
 
-export const getUserSession = async () => await getServerSession(authOptions);
+export const getUserSession = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => await getServerSession(req, res, authOptions);
+
 export const RedirectToLogin = {
   props: {},
   redirect: { destination: "/login", permanent: false },

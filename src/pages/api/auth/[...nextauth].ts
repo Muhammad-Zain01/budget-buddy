@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { VerifyPassword } from "@/lib/auth";
-import user from "@/lib/user";
+import user from "@/lib/query/user";
 
 export const authOptions: NextAuthOptions = {
   session: {
