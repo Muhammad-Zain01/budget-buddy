@@ -9,7 +9,7 @@ type ComponentProps = {
 };
 
 const SidbarItem: React.FC<ComponentProps> = ({
-  item: { label, Icon, key },
+  item: { title, Icon, key },
 }) => {
   const path = usePathname();
 
@@ -18,14 +18,14 @@ const SidbarItem: React.FC<ComponentProps> = ({
       href={key}
       className={clsx(
         "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground",
-        path.includes(key) && "bg-gray-100 dark:bg-neutral-700"
+        path?.includes(key) && "bg-gray-100 dark:bg-neutral-700"
       )}
       prefetch={false}
     >
       <div className="flex gap-3 items-center">
         {Icon}
         <span className="transition-all duration-300 data-[collapsed=true]:opacity-0 data-[collapsed=true]:w-0">
-          {label}
+          {title}
         </span>
       </div>
     </Link>

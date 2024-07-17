@@ -18,7 +18,7 @@ type LayoutProps = {
 
 const GeneralLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className}>{children}</body>
     </html>
   );
