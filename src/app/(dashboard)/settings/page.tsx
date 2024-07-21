@@ -8,10 +8,11 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import Preferences from "@/components/settings/preferences";
+import AccountSetting from "@/components/settings/account-settings";
 
 export default function Component() {
   return (
@@ -62,37 +63,13 @@ export default function Component() {
             Advanced
           </Link>
         </nav>
-        <div className="flex-1 mt-12">
+        <div className="flex-1 mt-12 space-y-5">
           <section>
             <h2 className="mb-4 text-xl font-bold">General Settings</h2>
-            <Card>
-              <CardHeader>
-                <CardTitle>Account Information</CardTitle>
-                <CardDescription>
-                  Update your account details, including your name, email, and
-                  password.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="grid gap-4">
-                  <div className="grid gap-1">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" defaultValue="John Doe" />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" defaultValue="john@example.com" />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" />
-                  </div>
-                </form>
-              </CardContent>
-              <CardFooter>
-                <Button>Save Changes</Button>
-              </CardFooter>
-            </Card>
+            <AccountSetting />
+          </section>
+          <section>
+            <Preferences />
           </section>
           <section className="mt-8">
             <h2 className="mb-4 text-xl font-bold">Notification Settings</h2>
