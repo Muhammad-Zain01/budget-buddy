@@ -58,7 +58,7 @@ const SelectorItem = ({
     <div
       className={clsx(
         "w-[12%] h-[50px] flex justify-center items-center dark:border-gray-600 border rounded-sm hover:border-gray-400 dark:hover:border-gray-100  cursor-pointer",
-        value == icon ? "border-gray-600 dark:border-gray-50" : "border-gray-200"
+        value == icon ? "border-gray-600 dark:border-white" : "border-gray-200"
       )}
       onClick={onClick}
     >

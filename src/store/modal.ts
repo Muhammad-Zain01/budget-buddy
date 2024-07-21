@@ -9,16 +9,21 @@ type AlertModal = {
 };
 type ModalStore = {
   addCategoryModal: Modal;
+  addAccountModal: Modal;
   alertModal: AlertModal;
   setAddCategoryModal: (value: boolean, data?: any) => void;
+  setAccountModal: (value: boolean, data?: any) => void;
   setAlertModal: (value: AlertModal) => void;
 };
 
 const useModalStore = create<ModalStore>((set) => ({
   addCategoryModal: { show: false, data: null },
+  addAccountModal: { show: false, data: null },
   alertModal: { show: false, title: "", description: "", action: () => {} },
   setAddCategoryModal: (value: boolean, data: any = null) =>
     set({ addCategoryModal: { show: value, data: data } }),
+  setAccountModal: (value: boolean, data: any = null) =>
+    set({ addAccountModal: { show: value, data: data } }),
   setAlertModal: (value: AlertModal) => set({ alertModal: value }),
 }));
 

@@ -102,6 +102,7 @@ enum TransactionType {
 enum AccountType {
   CASH
   BANK
+  PERSON
 }
 
 enum CategoryType {

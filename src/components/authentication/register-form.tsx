@@ -59,9 +59,9 @@ const RegisterForm = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Log in to your Account</h1>
+        <h1 className="text-2xl font-semibold">Create an account</h1>
         <p className="text-sm text-neutral-500">
-          Welcome back! Select method to log in:
+          Welcome back! please create account to continue:
         </p>
       </div>
 
