@@ -41,7 +41,7 @@ const TransactionInput = ({ form }: { form: any }) => {
         open={calculatorModal}
         onClose={(value?: number) => {
           if (value) {
-            form.setValue("amount", value);
+            form.setValue("amount", String(value));
           }
           setCalculatorModal(false);
         }}

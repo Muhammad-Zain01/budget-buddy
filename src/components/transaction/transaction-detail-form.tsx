@@ -7,6 +7,7 @@ import {
 } from "../ui/form";
 import DatePicker from "../ui/date-picker";
 import { Textarea } from "../ui/textarea";
+import { InputTags } from "../ui/tag-input";
 
 const TransactionDetailForm = ({ form }: { form: any }) => {
   return (
@@ -33,6 +34,23 @@ const TransactionDetailForm = ({ form }: { form: any }) => {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Description..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tags</FormLabel>
+              <FormControl>
+                <InputTags
+                  {...field}
+                  placeholder="Enter Tags..."
+                  className="w-full"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { AccountType, CategoryType } from "@prisma/client";
+import { AccountType } from "@prisma/client";
 
 export type AddAccount = {
   name: string;

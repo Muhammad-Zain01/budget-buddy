@@ -23,6 +23,7 @@ const formSchema = z.object({
   type: z.string(),
   date: z.date(),
   description: z.string(),
+  tags: z.array(z.string()).optional(),
   account: z.string().optional(),
   category: z.string().optional(),
   from: z.string().optional(),
@@ -34,6 +35,7 @@ const TransactionContent: React.FC<{
   value: TransactionType;
   onSubmit: (values: any) => void;
 }> = ({ value, onSubmit }) => {
+  
   const getTransactionGrid = () => {
     switch (value) {
       case "expense":

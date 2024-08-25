@@ -31,3 +31,12 @@ export const getIcon = (type: string) => {
       return "user";
   }
 };
+
+export const isValidJSON = (str: string) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
