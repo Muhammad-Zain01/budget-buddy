@@ -96,6 +96,7 @@ enum GoalTypes {
 enum TransactionType {
   INCOME
   EXPENSE
+  TRANSFER
   PEOPLE
 }
 

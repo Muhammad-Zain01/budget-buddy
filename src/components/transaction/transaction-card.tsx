@@ -42,7 +42,7 @@ const TransactionCard = ({ transaction }: any) => {
           <div className="flex gap-1 items-center justify-end">
             <Badge
               variant={"secondary"}
-              className="rounded-sm text-[10px] bg-[#16a34a32] text-primary border-primary"
+              className="rounded-sm text-[10px] text-primary border-primary"
             >
               Tags
             </Badge>

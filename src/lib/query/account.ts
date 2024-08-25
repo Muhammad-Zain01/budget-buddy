@@ -7,12 +7,6 @@ export type AddAccount = {
   balance: number;
 };
 
-type CategoryData = {
-  categoryName: string;
-  categoryType: string;
-  icon: string;
-};
-
 const account = {
   add: async (data: AddAccount) => {
     return await prisma.account.create({

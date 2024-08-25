@@ -10,18 +10,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Icon } from "../icon";
 import clsx from "clsx";
 import AccountDropdown from "./account-dropdown";
+import { getIcon } from "@/lib/utils";
 
 const AccountCard = ({ account, onDelete }: any) => {
-  const getIcon = (type: string) => {
-    switch (type) {
-      case "cash":
-        return "money";
-      case "bank":
-        return "bank";
-      case "person":
-        return "user";
-    }
-  };
   return (
     <Card className="relative rounded-md">
       <div className="flex  p-5">

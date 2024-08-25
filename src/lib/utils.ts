@@ -20,3 +20,14 @@ export const capitalize = (text: string) => {
   }
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
+
+export const getIcon = (type: string) => {
+  switch (type) {
+    case "cash":
+      return "money";
+    case "bank":
+      return "bank";
+    case "person":
+      return "user";
+  }
+};
