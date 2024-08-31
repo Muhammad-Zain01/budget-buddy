@@ -58,8 +58,9 @@ const CategoryGridItem = ({
     <div
       key={item.id}
       className={clsx(
-        "flex w-3/12 cursor-pointer flex-col items-center p-1 px-2 rounded-md border border-white hover:border-gray-200",
-        isSelected && "bg-gray-100"
+        "flex w-3/12 cursor-pointer flex-col items-center p-1 px-2 rounded-md border",
+        "border-white hover:border-gray-200 dark:border-gray-800 dark:hover:border-gray-700",
+        isSelected && "bg-gray-100 dark:bg-gray-800"
       )}
       onClick={onClick}
     >

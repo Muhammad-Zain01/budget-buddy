@@ -41,7 +41,7 @@ const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
       <div
         className={cn(
           // caveat: :has() variant requires tailwind v3.4 or above: https://tailwindcss.com/blog/tailwindcss-v3-4#new-has-variant
-          "has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neutral-950 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-neutral-300 min-h-10 flex w-full flex-wrap gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white  disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950",
+          "has-[:focus-visible]:outline-none bg-transparent has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neutral-950 has-[:focus-visible]:ring-offset-2  min-h-10 flex w-full flex-wrap gap-2 rounded-md border border-neutral-200  px-3 py-2 text-sm ring-offset-white  disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-transparent",
           className
         )}
       >
@@ -62,7 +62,7 @@ const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
         ))}
         <input
           placeholder={placeholder}
-          className="flex-1 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
+          className="flex-1 outline-none bg-transparent placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
           value={pendingDataPoint}
           onChange={(e) => setPendingDataPoint(e.target.value)}
           onKeyDown={(e) => {

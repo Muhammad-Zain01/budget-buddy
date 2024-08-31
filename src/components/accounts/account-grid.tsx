@@ -61,20 +61,23 @@ const AccountGridItem = ({
     <div
       key={item.id}
       className={clsx(
-        "flex w-3/12 cursor-pointer flex-col items-center p-1 px-2 rounded-md border border-white hover:border-gray-200",
-        isSelected && "bg-gray-100"
+        "flex w-3/12 cursor-pointer flex-col items-center p-1 px-2 rounded-md border",
+        "border-white hover:border-gray-200 dark:border-gray-800 dark:hover:border-gray-700",
+        isSelected && "bg-gray-100 dark:bg-gray-800"
       )}
       onClick={onClick}
     >
       <div className="flex">
-        <div className="bg-accent p-2 rounded-full">
+        <div className="bg-accent dark:bg-accent-dark p-2 rounded-full">
           <Icon
             icon={getIcon(item.type.toLowerCase()) as string}
-            className="w-8 h-8 text-accent-foreground dark:brightness-0 dark:invert"
+            className="w-8 h-8 text-accent-foreground dark:text-accent-foreground-dark"
           />
         </div>
       </div>
-      <p className="text-xs mt-2 line-clamp-1">{item.name}</p>
+      <p className="text-xs mt-2 line-clamp-1 text-gray-800 dark:text-gray-200">
+        {item.name}
+      </p>
     </div>
   );
 };
