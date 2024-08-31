@@ -2,7 +2,7 @@
 
 import useModalStore from "@/store/modal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import TransactionContent from "./transaction-content";
 import { useToast } from "../ui/use-toast";
@@ -32,19 +32,26 @@ const Items: { title: string; value: TransactionType }[] = [
 
 const TransactionModal = () => {
   const [loading, setLoading] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<TransactionType>("expense");
   const { toast } = useToast();
-  const { data, isLoading, refetch } = useTransaction();
-  const [currentAccountType, setAccountType] = useState<string | null>(null);
+  const { refetch } = useTransaction();
   const { addTransactionModal, setAddTransactionModal } = useModalStore(
     (state) => state
   );
-  const { show } = addTransactionModal;
+  const { show, data } = addTransactionModal;
+  const defaultTabValue = data?.type?.toLowerCase() || "expense";
+
+  useEffect(() => {
+    if (defaultTabValue) {
+      setSelectedTab(defaultTabValue);
+    }
+  }, [defaultTabValue]);
 
   const onSubmit = async (values: any) => {
     setLoading(true);
     const payload = {
       balance: values?.amount,
-      type: values?.type,
+      type: selectedTab,
       date: new Date(values.date).toISOString(),
       tags: values?.tags || [],
       description: values?.description || "",
@@ -54,36 +61,24 @@ const TransactionModal = () => {
       to: values?.to ? Number(values?.to) : undefined,
       subType: values?.people_type ? values?.people_type : undefined,
     };
-    console.log("sdf");
-    if (false) {
-      // const response = await Transaction.update(payload, data.id);
-      // if (response?.status) {
-      //   toast({
-      //     title: "Transaction updated successfully",
-      //   });
-      //   setAddTransactionModal(false);
-      //   refetch();
-      // }
+
+    if (data && data?.id) {
+      const response = await Transaction.update(payload, data.id);
+      if (response?.status) {
+        toast({
+          title: "Transaction updated successfully",
+        });
+      }
     } else {
       const response = await Transaction.add(payload);
       if (response.status) {
         toast({
           title: "Transaction added successfully",
         });
-        setAddTransactionModal(false);
-        refetch();
       }
     }
-    // if (data) {
-    // const response = await Category.update(values, data.id);
-    // if (response.status) {
-    //   toast({
-    //     title: "Category added successfully",
-    //   });
-    //   setAddCategoryModal(false);
-    //   refetch();
-    // }
-    setType(null);
+    refetch();
+    setAddTransactionModal(false);
     setLoading(false);
   };
 
@@ -91,23 +86,19 @@ const TransactionModal = () => {
     <Dialog
       open={show}
       onOpenChange={(e) => {
-        if (currentAccountType && !data) {
-          setAccountType(null);
-        } else {
-          setAddTransactionModal(e);
-        }
+        setAddTransactionModal(e);
       }}
     >
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>
-            {data ? "Update" : "Add"}{" "}
-            {currentAccountType ? currentAccountType : ""} Transaction
-          </DialogTitle>
+          <DialogTitle>{data ? "Update" : "Add"} Transaction</DialogTitle>
         </DialogHeader>
-
         <div>
-          <Tabs defaultValue="expense" className="w-full">
+          <Tabs
+            defaultValue={defaultTabValue}
+            className="w-full"
+            onValueChange={(value) => setSelectedTab(value as TransactionType)}
+          >
             <TabsList className="grid w-full grid-cols-4">
               {Items.map((item) => {
                 return (
@@ -120,7 +111,12 @@ const TransactionModal = () => {
             {Items.map((item) => {
               return (
                 <TabsContent key={item.value} value={item.value}>
-                  <TransactionContent value={item.value} onSubmit={onSubmit} />
+                  <TransactionContent
+                    data={data}
+                    loading={loading}
+                    value={item.value}
+                    onSubmit={onSubmit}
+                  />
                 </TabsContent>
               );
             })}

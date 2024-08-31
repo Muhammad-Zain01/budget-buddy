@@ -15,6 +15,9 @@ import { Button } from "../ui/button";
 import AccountGrid from "../accounts/account-grid";
 import CategoryGrid from "../category/category-grid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { useEffect } from "react";
+import { isValidJSON } from "@/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 type PeopleType = "pay" | "receive" | "lend" | "borrow";
 
@@ -32,10 +35,11 @@ const formSchema = z.object({
 });
 
 const TransactionContent: React.FC<{
+  data: any;
+  loading: boolean;
   value: TransactionType;
   onSubmit: (values: any) => void;
-}> = ({ value, onSubmit }) => {
-  
+}> = ({ data, value, onSubmit, loading }) => {
   const getTransactionGrid = () => {
     switch (value) {
       case "expense":
@@ -45,7 +49,9 @@ const TransactionContent: React.FC<{
       case "transfer":
         return <TransactionTransfer form={form} />;
       case "people":
-        return <TransactionPeople form={form} />;
+        return (
+          <TransactionPeople form={form} defaultTabValue={data?.subType} />
+        );
     }
   };
 
@@ -53,6 +59,26 @@ const TransactionContent: React.FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
+
+  useEffect(() => {
+    if (data) {
+      form.setValue("type", data?.type?.toLowerCase());
+      data?.amount && form.setValue("amount", String(data?.amount));
+      data?.createdAt && form.setValue("date", new Date(data?.createdAt));
+      data?.description && form.setValue("description", data?.description);
+      data?.tags &&
+        form.setValue(
+          "tags",
+          isValidJSON(data?.tags) ? JSON.parse(data?.tags) : []
+        );
+      data?.accountId && form.setValue("account", String(data?.accountId));
+      data?.categoryId && form.setValue("category", String(data?.categoryId));
+      data?.fromId && form.setValue("from", String(data?.fromId));
+      data?.toId && form.setValue("to", String(data?.toId));
+      data?.subType && form.setValue("people_type", data?.subType);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <div className="mt-4">
@@ -62,21 +88,10 @@ const TransactionContent: React.FC<{
           <TransactionDetailForm form={form} />
           {getTransactionGrid()}
 
-          <FormField
-            name="type"
-            control={form.control}
-            defaultValue={value}
-            render={({ field }) => <input type="hidden" {...field} />}
-          />
-
           <div className="flex mt-6 justify-end">
-            <Button
-              type="submit"
-              // disabled={loading}
-              className="gap-1"
-            >
-              {/* {loading && <Spinner className="text-white w-4 " />} */}
-              Add Transaction
+            <Button type="submit" disabled={loading} className="gap-1">
+              {loading && <Spinner className="text-white w-4 " />}
+              {data ? "Update" : "Add"} Transaction
             </Button>
           </div>
         </form>
@@ -161,7 +176,13 @@ const TransactionTransfer = ({ form }: { form: any }) => {
   );
 };
 
-const TransactionPeople = ({ form }: { form: any }) => {
+const TransactionPeople = ({
+  form,
+  defaultTabValue,
+}: {
+  form: any;
+  defaultTabValue: string;
+}) => {
   const Items = [
     {
       title: "Pay",
@@ -190,7 +211,7 @@ const TransactionPeople = ({ form }: { form: any }) => {
   };
   return (
     <>
-      <Tabs defaultValue={"pay"} className="w-full mt-3">
+      <Tabs defaultValue={defaultTabValue || "pay"} className="w-full mt-3">
         <TabsList className="grid w-full grid-cols-4">
           {Items.map((item) => {
             return (

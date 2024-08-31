@@ -25,7 +25,23 @@ export const Transaction = {
     });
     return await res.json();
   },
-  update: async (data: any) => {
-    console.log("xx");
+  remove: async (id: number) => {
+    const res = await request(`/api/transaction/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await res.json();
+  },
+  update: async (data: any, id: number) => {
+    const res = await request(`/api/transaction/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await res.json();
   },
 };

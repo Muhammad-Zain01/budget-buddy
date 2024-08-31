@@ -6,16 +6,38 @@ import AddButton from "@/components/add-button";
 import TransactionCard from "@/components/transaction/transaction-card";
 import useModalStore from "@/store/modal";
 import TransactionModal from "@/components/transaction/transaction-modal";
+import useTransaction from "@/hooks/api/useTransaction";
+import { Transaction } from "@/models";
+import Loading from "@/components/loader";
+import { Transaction as TransactionService } from "@/lib/services/transaction";
+import { useToast } from "@/components/ui/use-toast";
 
-export default function AccountPage() {
-  const [activeTab, setActiveTab] = useState("income");
-  const [categories] = useState(PrimaryCategories);
+export default function TransactionPage() {
+  const { data, isLoading, refetch } = useTransaction();
+  const { toast } = useToast();
   const setAddTransactionModal = useModalStore(
     (state) => state.setAddTransactionModal
   );
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
+  const onDelete = async (id: number) => {
+    const response = await TransactionService.remove(id);
+    if (response.status) {
+      toast({
+        title: "Transaction Deleted",
+        description: "Transaction has been deleted successfully",
+      });
+      refetch();
+    }
+    close();
+  };
+
+  const onEdit = (id: number) => {
+    const transaction = data?.data.find(
+      (transaction: Transaction) => transaction.id === id
+    );
+    if (transaction) {
+      setAddTransactionModal(true, transaction);
+    }
   };
 
   return (
@@ -29,13 +51,20 @@ export default function AccountPage() {
             }}
           />
         </div>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2  gap-4">
-          {categories
-            .filter((category) => category.type === activeTab)
-            .map((category, index) => (
-              <TransactionCard key={index} transaction={category} />
+        {!isLoading ? (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2  gap-4">
+            {data?.data.map((transaction: Transaction, index: number) => (
+              <TransactionCard
+                key={index}
+                transaction={transaction}
+                onDelete={onDelete}
+                onEdit={onEdit}
+              />
             ))}
-        </div>
+          </div>
+        ) : (
+          <Loading size="sm" fullPage />
+        )}
       </main>
       <TransactionModal />
     </div>

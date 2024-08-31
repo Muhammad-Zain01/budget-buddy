@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getUserSession } from "@/lib/auth";
 import transaction from "@/lib/query/transaction";
-import { TransactionType } from "@prisma/client";
+import { Transaction, TransactionType } from "@prisma/client";
 
-const TypeSelector = (type: string) => {
+export const TypeSelector = (type: string) => {
   const types = {
     expense: TransactionType.EXPENSE,
     income: TransactionType.INCOME,
@@ -13,11 +13,26 @@ const TypeSelector = (type: string) => {
   return types[type];
 };
 
-const TagsConverter = (tags: string[] | null) => {
+export const TagsConverter = (tags: string[] | null) => {
   if (tags && Array.isArray(tags)) {
     return JSON.stringify(tags);
   }
   return "";
+};
+
+const generateTransactionBody = (body: any, userId: number) => {
+  return {
+    type: TypeSelector(body?.type),
+    tags: TagsConverter(body?.tags),
+    subType: body?.subType || null,
+    description: body?.description || "",
+    amount: Number(body?.balance || 0),
+    categoryId: body?.category || null,
+    accountId: body?.account || null,
+    fromId: body?.from || null,
+    toId: body?.to || null,
+    userId,
+  };
 };
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getUserSession(req, res);
@@ -35,21 +50,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method == "POST") {
     const body = req.body;
-    const data = {
-      ...body,
-      type: TypeSelector(body.type),
-      tags: TagsConverter(body.tags),
-    };
-    
-    console.log("bod >>", data);
-    // const result = await transaction.add({
-    //   ...body,
-    //   type: TypeSelector(body.type),
-    //   userId,
-    // });
-    // res
-    //   .status(200)
-    //   .json({ status: 1, message: "Account Added Succesfully", data: result });
+    const data = generateTransactionBody(body, userId);
+    const result = await transaction.add(data as Transaction);
+    res.status(200).json({
+      status: 1,
+      message: "Transaction Added Succesfully",
+      data: result,
+    });
   }
 
   //

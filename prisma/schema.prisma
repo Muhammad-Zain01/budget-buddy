@@ -42,33 +42,37 @@ model Category {
 }
 
 model Account {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(100)
-  type        AccountType
-  balance     Float         @default(0)
-  status      Boolean       @default(true)
-  createdAt   DateTime      @default(now())
-  addedBy     User          @relation(fields: [userId], references: [id])
-  userId      Int
-  Transaction Transaction[]
+  id               Int           @id @default(autoincrement())
+  name             String        @db.VarChar(100)
+  type             AccountType
+  balance          Float         @default(0)
+  status           Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  addedBy          User          @relation(fields: [userId], references: [id])
+  userId           Int
+  Transaction      Transaction[]
+  fromTransactions Transaction[] @relation("FromAccount")
+  toTransactions   Transaction[] @relation("ToAccount")
 }
 
 model Transaction {
   id          Int             @id @default(autoincrement())
   type        TransactionType
-  subType     String          @default("")
-  description String
-  tags        String
+  subType     String?         @db.VarChar(100)
+  description String?         @db.VarChar(1000)
+  tags        String?         @db.VarChar(1000)
   amount      Float
   createdAt   DateTime        @default(now())
-  categoryId  Int
-  accountId   Int
-  fromId      Int
-  toId        Int
+  categoryId  Int?
+  accountId   Int?
+  fromId      Int?
+  toId        Int?
   userId      Int
-  category    Category        @relation(fields: [categoryId], references: [id])
-  account     Account         @relation(fields: [accountId], references: [id])
-  addedBy     User            @relation(fields: [userId], references: [id])
+  category    Category?       @relation(fields: [categoryId], references: [id])
+  account     Account?        @relation(fields: [accountId], references: [id])
+  addedBy     User?            @relation(fields: [userId], references: [id])
+  fromAccount Account?        @relation("FromAccount", fields: [fromId], references: [id])
+  toAccount   Account?        @relation("ToAccount", fields: [toId], references: [id])
 }
 
 model Goal {
