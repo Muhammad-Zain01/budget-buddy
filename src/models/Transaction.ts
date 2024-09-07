@@ -1,6 +1,8 @@
 import { Account } from "./Account";
 import { Category } from "./Category";
 
+type SubType = "pay" | "receive" | "lend" | "borrow";
+
 export type Transaction = {
   id: number;
   balance: string;
@@ -11,6 +13,10 @@ export type Transaction = {
   category: number | Category;
   from: number;
   to: number;
+  fromAccount?: Account;
+  toAccount?: Account;
+  subType?: SubType;
+  createdAt?: string;
   date: string;
   status: boolean;
 };

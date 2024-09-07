@@ -9,6 +9,7 @@ import Loading from "@/components/loader";
 import { useToast } from "@/components/ui/use-toast";
 import { Account } from "@/lib/services/account";
 import useAlertDialoag from "@/hooks/useAlertDialog";
+import EmptyRecord from "@/components/empty-record";
 
 export default function AccountPage() {
   const { data, isLoading, refetch } = useAccount();
@@ -40,11 +41,21 @@ export default function AccountPage() {
         {isLoading ? (
           <Loading fullPage />
         ) : (
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {data?.data?.map((account, index) => (
-              <AccountCard key={index} account={account} onDelete={onDelete} />
-            ))}
-          </div>
+          <>
+            {data?.data?.length > 0 ? (
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {data?.data?.map((account, index) => (
+                  <AccountCard
+                    key={index}
+                    account={account}
+                    onDelete={onDelete}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyRecord title="No Accounts Available" />
+            )}
+          </>
         )}
       </main>
       <AccountModal />

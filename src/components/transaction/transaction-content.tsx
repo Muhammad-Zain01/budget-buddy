@@ -62,6 +62,8 @@ const TransactionContent: React.FC<{
 
   useEffect(() => {
     if (data) {
+      const accountId =
+        data?.type?.toLowerCase() == "income" ? data?.toId : data?.fromId;
       form.setValue("type", data?.type?.toLowerCase());
       data?.amount && form.setValue("amount", String(data?.amount));
       data?.createdAt && form.setValue("date", new Date(data?.createdAt));
@@ -71,7 +73,7 @@ const TransactionContent: React.FC<{
           "tags",
           isValidJSON(data?.tags) ? JSON.parse(data?.tags) : []
         );
-      data?.accountId && form.setValue("account", String(data?.accountId));
+      accountId && form.setValue("account", String(accountId));
       data?.categoryId && form.setValue("category", String(data?.categoryId));
       data?.fromId && form.setValue("from", String(data?.fromId));
       data?.toId && form.setValue("to", String(data?.toId));
@@ -89,7 +91,13 @@ const TransactionContent: React.FC<{
           {getTransactionGrid()}
 
           <div className="flex mt-6 justify-end">
-            <Button type="submit" disabled={loading} className="gap-1">
+            <Button
+              onClick={() => {
+                onSubmit(form.getValues());
+              }}
+              disabled={loading}
+              className="gap-1"
+            >
               {loading && <Spinner className="text-white w-4 " />}
               {data ? "Update" : "Add"} Transaction
             </Button>

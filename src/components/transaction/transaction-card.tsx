@@ -10,8 +10,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Icon } from "../icon";
 import { Badge } from "../ui/badge";
 import { DateTime } from "luxon";
-import { Category, Transaction } from "@/models";
+import { Account, Category, Transaction } from "@/models";
 import { getIcon } from "@/lib/utils";
+import clsx from "clsx";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -34,32 +35,56 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
   };
 
   const getHead = (type: string) => {
-    if (type == "expense" || type == "income") {
-      const category = transaction?.category as Category;
-      return {
-        icon: category?.icon,
-        title: category?.categoryName,
-        subTitle: category?.categoryName,
-      };
-    } else {
-      return {
-        icon: getIcon(transaction?.fromAccount?.type.toLowerCase()) as string,
-        title: transaction?.fromAccount?.name,
-        subTitle: transaction?.fromAccount?.name,
-      };
-    }
-    return {
-      icon: "",
-      title: "",
-      subTitle: "",
+    const account = transaction?.toAccount as Account;
+    const fromAccount = transaction?.fromAccount?.name;
+    const toAccount = account?.name;
+
+    const commonProps = {
+      amount: transaction?.amount,
     };
+
+    switch (type) {
+      case "expense":
+      case "income":
+        const category = transaction?.category as Category;
+        return {
+          ...commonProps,
+          subTitle: type == "income" ? toAccount : fromAccount,
+          icon: category?.icon,
+          title: category?.categoryName,
+          amount:
+            type === "expense" ? `-${commonProps.amount}` : commonProps.amount,
+        };
+      case "transfer":
+        return {
+          ...commonProps,
+          icon: getIcon("transfer") as string,
+          subTitle: `${fromAccount} > ${toAccount}`,
+          title: "Transfer",
+        };
+      case "people":
+        const peopleTypeMap = {
+          pay: "Money Sent",
+          receive: "Money Received",
+          lend: "Money Lent",
+          borrow: "Money Borrowed",
+        };
+        return {
+          ...commonProps,
+          icon: getIcon("transfer"),
+          subTitle: `${fromAccount} > ${toAccount}`,
+          title:
+            peopleTypeMap[transaction?.subType as keyof typeof peopleTypeMap] ||
+            "",
+        };
+      default:
+        return null;
+    }
   };
 
   const getTransaction = () => {
     const type = transaction?.type.toLowerCase();
-    const subType = "";
-    const { title, subTitle, icon } = getHead(type);
-    const amount = transaction?.amount;
+    const { title, subTitle, icon, amount }: any = getHead(type);
     // @ts-ignore
     const date = DateTime.fromISO(transaction?.createdAt).toRelative();
     const description = transaction?.description;
@@ -67,7 +92,6 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
     return {
       icon,
       type,
-      subType,
       title,
       subTitle,
       amount,
@@ -77,7 +101,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
     };
   };
 
-  const { icon, title, subTitle, amount, date, description, tags } =
+  const { icon, title, type, subTitle, amount, date, description, tags } =
     getTransaction();
 
   return (
@@ -95,7 +119,14 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
             </div>
           </div>
           <div className="flex flex-col justify-center items-end w-full text-sm text-gray-600 dark:text-gray-100 font-[500]">
-            ${amount}
+            <span
+              className={clsx({
+                "text-red-700": type == "expense",
+                "text-green-700": type == "income",
+              })}
+            >
+              ${amount}
+            </span>
             <span className="text-[11px]  font-[300]">{date}</span>
           </div>
         </div>

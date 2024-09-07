@@ -31,13 +31,10 @@ const transaction = {
         fromAccount: data?.fromId
           ? { connect: { id: data.fromId } }
           : undefined,
-        toAccount: data?.toId ? { connect: { id: data.toId } } : undefined,
+
         // Other fields
         category: data?.categoryId
           ? { connect: { id: data.categoryId } }
-          : undefined,
-        account: data?.accountId
-          ? { connect: { id: data.accountId } }
           : undefined,
 
         subType: data?.subType,
@@ -57,10 +54,8 @@ const transaction = {
         amount: true,
         createdAt: true,
         categoryId: true,
-        accountId: true,
         userId: true,
         category: true,
-        account: true,
         addedBy: true,
         subType: true,
         fromAccount: true,

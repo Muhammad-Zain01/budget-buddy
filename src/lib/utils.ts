@@ -29,6 +29,8 @@ export const getIcon = (type: string) => {
       return "bank";
     case "person":
       return "user";
+    case "transfer":
+      return "transfer";
   }
 };
 

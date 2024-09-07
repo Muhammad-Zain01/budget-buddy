@@ -28,7 +28,6 @@ const generateTransactionBody = (body: any, userId: number) => {
     description: body?.description || "",
     amount: Number(body?.balance || 0),
     categoryId: body?.category || null,
-    accountId: body?.account || null,
     fromId: body?.from || null,
     toId: body?.to || null,
     userId,

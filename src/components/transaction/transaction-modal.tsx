@@ -8,6 +8,7 @@ import TransactionContent from "./transaction-content";
 import { useToast } from "../ui/use-toast";
 import useTransaction from "@/hooks/api/useTransaction";
 import { Transaction } from "@/lib/services/transaction";
+import useAccount from "@/hooks/api/useAccount";
 
 export type TransactionType = "expense" | "income" | "transfer" | "people";
 
@@ -35,6 +36,7 @@ const TransactionModal = () => {
   const [selectedTab, setSelectedTab] = useState<TransactionType>("expense");
   const { toast } = useToast();
   const { refetch } = useTransaction();
+  const { data: accountData } = useAccount();
   const { addTransactionModal, setAddTransactionModal } = useModalStore(
     (state) => state
   );
@@ -47,8 +49,60 @@ const TransactionModal = () => {
     }
   }, [defaultTabValue]);
 
+  const validation = (values: any) => {
+    const amount = Number(values.amount);
+    const accountId =
+      selectedTab === "people" || selectedTab === "transfer"
+        ? values?.from
+        : values?.account;
+    const account = accountData?.data.find(
+      (a) => Number(a.id) === Number(accountId)
+    );
+    const currentBalance = Number(account?.balance);
+
+    const insufficientBalanceCheck = (transactionType: string) => {
+      if (currentBalance < amount) {
+        toast({
+          title: "Insufficient Balance",
+          description: `The account does not have enough balance for this ${transactionType}.`,
+          variant: "destructive",
+        });
+        return true;
+      }
+      return false;
+    };
+
+    switch (selectedTab) {
+      case "expense":
+        return !insufficientBalanceCheck("expense");
+      case "transfer":
+        return !insufficientBalanceCheck("transfer");
+      case "people":
+        const subType = values?.people_type;
+        if (subType === "pay" || subType === "lend") {
+          return !insufficientBalanceCheck(
+            subType === "pay" ? "payment" : "lending transaction"
+          );
+        }
+        break;
+    }
+
+    return true;
+  };
   const onSubmit = async (values: any) => {
+    if (!validation(values)) return false;
+
     setLoading(true);
+
+    let from = values?.from ? Number(values?.from) : undefined;
+    let to = values?.to ? Number(values?.to) : undefined;
+
+    if (selectedTab == "expense") {
+      from = values?.account ? Number(values?.account) : undefined;
+    } else if (selectedTab == "income") {
+      to = values?.account ? Number(values?.account) : undefined;
+    }
+
     const payload = {
       balance: values?.amount,
       type: selectedTab,
@@ -56,9 +110,8 @@ const TransactionModal = () => {
       tags: values?.tags || [],
       description: values?.description || "",
       category: values?.category ? Number(values?.category) : undefined,
-      account: values?.account ? Number(values?.account) : undefined,
-      from: values?.from ? Number(values?.from) : undefined,
-      to: values?.to ? Number(values?.to) : undefined,
+      from: from,
+      to: to,
       subType: values?.people_type ? values?.people_type : undefined,
     };
 
@@ -89,7 +142,7 @@ const TransactionModal = () => {
         setAddTransactionModal(e);
       }}
     >
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] flex flex-col">
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Add"} Transaction</DialogTitle>
         </DialogHeader>

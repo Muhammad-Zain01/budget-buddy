@@ -31,7 +31,7 @@ const AccountGrid: React.FC<AccountGridProps> = ({
     return true;
   });
   return (
-    <div className="flex gap-3">
+    <div className="grid grid-cols-4 gap-3 max-h-[200px] overflow-y-auto">
       {accountData?.map((item: Account) => {
         return (
           <AccountGridItem
@@ -61,7 +61,7 @@ const AccountGridItem = ({
     <div
       key={item.id}
       className={clsx(
-        "flex w-3/12 cursor-pointer flex-col items-center p-1 px-2 rounded-md border",
+        "flex  cursor-pointer flex-col items-center p-1 px-2 rounded-md border",
         "border-white hover:border-gray-200 dark:border-gray-800 dark:hover:border-gray-700",
         isSelected && "bg-gray-100 dark:bg-gray-800"
       )}

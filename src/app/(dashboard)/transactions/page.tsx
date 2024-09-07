@@ -11,6 +11,7 @@ import { Transaction } from "@/models";
 import Loading from "@/components/loader";
 import { Transaction as TransactionService } from "@/lib/services/transaction";
 import { useToast } from "@/components/ui/use-toast";
+import EmptyRecord from "@/components/empty-record";
 
 export default function TransactionPage() {
   const { data, isLoading, refetch } = useTransaction();
@@ -52,16 +53,22 @@ export default function TransactionPage() {
           />
         </div>
         {!isLoading ? (
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2  gap-4">
-            {data?.data.map((transaction: Transaction, index: number) => (
-              <TransactionCard
-                key={index}
-                transaction={transaction}
-                onDelete={onDelete}
-                onEdit={onEdit}
-              />
-            ))}
-          </div>
+          <>
+            {data?.data?.length > 0 ? (
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2  gap-4">
+                {data?.data.map((transaction: Transaction, index: number) => (
+                  <TransactionCard
+                    key={index}
+                    transaction={transaction}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyRecord title="No Transactions Available" />
+            )}
+          </>
         ) : (
           <Loading size="sm" fullPage />
         )}
