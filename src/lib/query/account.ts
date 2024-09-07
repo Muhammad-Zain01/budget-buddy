@@ -102,6 +102,80 @@ const account = {
 
     return updatedAccounts;
   },
+  getDashboardDataByUser: async (userId: number) => {
+    const accountsWithTransactions = await prisma.account.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        balance: true,
+        createdAt: true,
+        status: true,
+        fromTransactions: {
+          select: {
+            amount: true,
+            type: true,
+            subType: true,
+            categoryId: true,
+          },
+        },
+        toTransactions: {
+          select: {
+            amount: true,
+            type: true,
+            subType: true,
+            categoryId: true,
+          },
+        },
+      },
+    });
+    
+    let totalBalance = 0;
+    let totalIncome = 0;
+    let totalExpense = 0;
+    const spendingBreakdown = {};
+    const incomeVsExpense = { income: 0, expense: 0 };
+
+    accountsWithTransactions.forEach((account) => {
+      let accountBalance = account.balance;
+
+      account.fromTransactions.forEach((transaction) => {
+        if (transaction.type === "EXPENSE") {
+          totalExpense += transaction.amount;
+          accountBalance -= transaction.amount;
+          incomeVsExpense.expense += transaction.amount;
+          spendingBreakdown[transaction.categoryId] = (spendingBreakdown[transaction.categoryId] || 0) + transaction.amount;
+        } else if (transaction.type === "TRANSFER" || transaction.type === "PEOPLE") {
+          accountBalance -= transaction.amount;
+        }
+      });
+
+      account.toTransactions.forEach((transaction) => {
+        if (transaction.type === "INCOME") {
+          totalIncome += transaction.amount;
+          accountBalance += transaction.amount;
+          incomeVsExpense.income += transaction.amount;
+        } else if (transaction.type === "TRANSFER" || transaction.type === "PEOPLE") {
+          accountBalance += transaction.amount;
+        }
+      });
+
+      totalBalance += accountBalance;
+    });
+
+    const dashboardData = {
+      currentAmount: totalBalance,
+      totalIncome: totalIncome,
+      totalExpense: totalExpense,
+      spendingBreakdown: spendingBreakdown,
+      incomeVsExpense: incomeVsExpense,
+    };
+
+    return dashboardData;
+  },
 };
 
 export default account;

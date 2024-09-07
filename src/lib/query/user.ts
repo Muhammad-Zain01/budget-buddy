@@ -15,6 +15,21 @@ const user = {
       },
     });
   },
+  getUserFromUserId: async (userId: number) => {
+    return await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        email: true,
+        password: true,
+        currency: true,
+      },
+    });
+  },
 };
 
 export default user;

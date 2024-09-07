@@ -13,6 +13,7 @@ import { DateTime } from "luxon";
 import { Account, Category, Transaction } from "@/models";
 import { getIcon } from "@/lib/utils";
 import clsx from "clsx";
+import CurrencyView from "../ui/currency-view";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -125,7 +126,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
                 "text-green-700": type == "income",
               })}
             >
-              ${amount}
+              <CurrencyView>{amount}</CurrencyView>
             </span>
             <span className="text-[11px]  font-[300]">{date}</span>
           </div>

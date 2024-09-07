@@ -16,9 +16,7 @@ model User {
   isVerfied      Boolean       @default(false)
   profileImage   String?       @db.VarChar(100)
   status         Boolean?      @default(true)
-  isPinProtected Boolean?      @default(false)
-  pin            String?       @db.VarChar(10)
-  country        String?       @default("pk") @db.VarChar(10)
+  
   currency       String?       @default("PKR") @db.VarChar(10)
   createdAt      DateTime?     @default(now())
   Category       Category[]

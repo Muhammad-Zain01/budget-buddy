@@ -1,3 +1,4 @@
+
 const currencies = [
   { code: "AFN", label: "Afghan Afghani", symbol: "؋" },
   { code: "ALL", label: "Albanian Lek", symbol: "L" },

@@ -11,6 +11,7 @@ import { Icon } from "../icon";
 import clsx from "clsx";
 import AccountDropdown from "./account-dropdown";
 import { getIcon } from "@/lib/utils";
+import CurrencyView from "../ui/currency-view";
 
 const AccountCard = ({ account, onDelete }: any) => {
   return (
@@ -36,7 +37,7 @@ const AccountCard = ({ account, onDelete }: any) => {
               account.balance < 0 && "text-red-500"
             )}
           >
-            $ {account.balance}
+            <CurrencyView>{account.balance}</CurrencyView>
           </div>
         </div>
 

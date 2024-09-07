@@ -11,6 +11,9 @@ import {
   ChartTooltip,
   ChartContainer,
 } from "@/components/ui/chart";
+import CurrencyView from "@/components/ui/currency-view";
+import useDashboard from "@/hooks/api/useDashboard";
+
 import {
   Pie,
   PieChart,
@@ -23,45 +26,44 @@ import {
 } from "recharts";
 
 export default function DashboardPage() {
+  const { data, isLoading } = useDashboard();
+  console.log("xx", data?.data?.currentAmount);
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1  ">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Net Worth</CardTitle>
+              <CardTitle>Current Balance</CardTitle>
               <CardDescription>
                 Your total assets minus liabilities
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold">$124,567.89</div>
-              <div className="text-sm text-muted-foreground">
-                +5.2% from last month
+              <div className="text-4xl font-bold">
+                <CurrencyView>{data?.data?.currentAmount}</CurrencyView>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
               <CardTitle>Income</CardTitle>
-              <CardDescription>Your total monthly income</CardDescription>
+              <CardDescription>Your total income</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold">$8,450.00</div>
-              <div className="text-sm text-muted-foreground">
-                +3.1% from last month
+              <div className="text-4xl font-bold">
+                <CurrencyView>{data?.data?.totalIncome}</CurrencyView>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
               <CardTitle>Expenses</CardTitle>
-              <CardDescription>Your total monthly expenses</CardDescription>
+              <CardDescription>Your total expenses</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold">$4,320.00</div>
-              <div className="text-sm text-muted-foreground">
-                -1.2% from last month
+              <div className="text-4xl font-bold">
+                <CurrencyView>{data?.data?.totalExpense}</CurrencyView>
               </div>
             </CardContent>
           </Card>
