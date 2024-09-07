@@ -24,6 +24,7 @@ import { useEffect, useMemo } from "react";
 import Loading from "../loader";
 
 import currencies from "@/constants/currencies";
+import CurrencySelector from "../ui/currency-selector";
 
 const Preferences = () => {
   const { data, status } = useSession();
@@ -81,44 +82,12 @@ const Preferences = () => {
               <div className="space-y-2">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="currency"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Currency</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter email..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="currentPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Current Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your current password..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="newPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>New Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your New Password..."
-                          {...field}
-                        />
+                        <CurrencySelector {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

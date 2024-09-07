@@ -19,7 +19,7 @@ model User {
   isPinProtected Boolean?      @default(false)
   pin            String?       @db.VarChar(10)
   country        String?       @default("pk") @db.VarChar(10)
-  currency       String?       @default("pkr") @db.VarChar(10)
+  currency       String?       @default("PKR") @db.VarChar(10)
   createdAt      DateTime?     @default(now())
   Category       Category[]
   Account        Account[]

@@ -37,16 +37,6 @@ export const DashboardItems: DashboardItemType[] = [
     Icon: <ArrowLeftRight />,
   },
   {
-    key: "goals",
-    title: "Goals",
-    Icon: <Goal />,
-  },
-  {
-    key: "insights",
-    title: "Insights",
-    Icon: <PieChart />,
-  },
-  {
     key: "settings",
     title: "Settings",
     Icon: <Settings />,
