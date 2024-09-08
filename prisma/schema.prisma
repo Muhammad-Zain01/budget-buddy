@@ -16,7 +16,6 @@ model User {
   isVerfied      Boolean       @default(false)
   profileImage   String?       @db.VarChar(100)
   status         Boolean?      @default(true)
-  
   currency       String?       @default("PKR") @db.VarChar(10)
   createdAt      DateTime?     @default(now())
   Category       Category[]

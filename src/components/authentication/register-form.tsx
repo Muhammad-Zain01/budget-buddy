@@ -126,7 +126,7 @@ const RegisterForm = () => {
             />
           </div>
           <Button type="submit" className="w-full mt-5 h-10">
-            Login
+            Register
           </Button>
         </form>
       </Form>

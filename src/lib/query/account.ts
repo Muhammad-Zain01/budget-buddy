@@ -132,7 +132,7 @@ const account = {
         },
       },
     });
-    
+
     let totalBalance = 0;
     let totalIncome = 0;
     let totalExpense = 0;
@@ -147,8 +147,13 @@ const account = {
           totalExpense += transaction.amount;
           accountBalance -= transaction.amount;
           incomeVsExpense.expense += transaction.amount;
-          spendingBreakdown[transaction.categoryId] = (spendingBreakdown[transaction.categoryId] || 0) + transaction.amount;
-        } else if (transaction.type === "TRANSFER" || transaction.type === "PEOPLE") {
+          spendingBreakdown[transaction.categoryId] =
+            (spendingBreakdown[transaction.categoryId] || 0) +
+            transaction.amount;
+        } else if (
+          transaction.type === "TRANSFER" ||
+          transaction.type === "PEOPLE"
+        ) {
           accountBalance -= transaction.amount;
         }
       });
@@ -158,7 +163,10 @@ const account = {
           totalIncome += transaction.amount;
           accountBalance += transaction.amount;
           incomeVsExpense.income += transaction.amount;
-        } else if (transaction.type === "TRANSFER" || transaction.type === "PEOPLE") {
+        } else if (
+          transaction.type === "TRANSFER" ||
+          transaction.type === "PEOPLE"
+        ) {
           accountBalance += transaction.amount;
         }
       });

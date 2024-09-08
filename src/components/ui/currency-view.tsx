@@ -9,7 +9,7 @@ interface CurrencyViewProps {
 
 const CurrencyView: React.FC<CurrencyViewProps> = ({ className, children }) => {
   const { data } = useCurrentUser();
-  const currency = data?.data?.currency || "$";
+  const currency = data?.data?.currency || "";
 
   return (
     <div className={twMerge("flex items-center", className)}>

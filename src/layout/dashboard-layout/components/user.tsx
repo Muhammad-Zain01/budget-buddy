@@ -10,17 +10,19 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import { getFirstLetterOfName } from "@/lib/utils";
+import useCurrentUser from "@/hooks/api/useCurrentUser";
 
 const User = () => {
+  const { data: userData } = useCurrentUser();
   const { data } = useSession();
   const user = data?.user;
   const letter = getFirstLetterOfName(user?.name as string);
-
+  const profile = userData?.data?.profileImage || "/placeholder-user.jpg";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-9 w-9 cursor-pointer">
-          <AvatarImage src="/placeholder-user.jpg" />
+          <AvatarImage src={profile} />
           <AvatarFallback>{letter}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

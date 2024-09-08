@@ -58,6 +58,20 @@ const LoginForm = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    const response = await signIn("google", { redirect: false });
+    console.log("response", response);
+    if (response?.error) {
+      toast({
+        variant: "destructive",
+        title: "Failed to login with Google",
+        description: response.error,
+      });
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
   return (
     <div>
       <div className="mb-8">
@@ -106,6 +120,9 @@ const LoginForm = () => {
           </div>
           <Button type="submit" className="w-full mt-5 h-10">
             Login
+          </Button>
+          <Button onClick={handleGoogleLogin} className="mt-2 w-full">
+            Login with Google
           </Button>
         </form>
       </Form>

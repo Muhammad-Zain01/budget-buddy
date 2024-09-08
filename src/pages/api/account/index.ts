@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ status: 0, message: "UN_AUTHORIZED" });
   }
   const userId = session?.user?.userId;
-
+  console.log(session);
   if (req.method === "GET") {
     const result = await account.getAccountsByUser(userId);
     if (result) {

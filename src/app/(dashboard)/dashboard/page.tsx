@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/components/loader";
 import {
   Card,
   CardHeader,
@@ -12,6 +13,7 @@ import {
   ChartContainer,
 } from "@/components/ui/chart";
 import CurrencyView from "@/components/ui/currency-view";
+import { Spinner } from "@/components/ui/spinner";
 import useDashboard from "@/hooks/api/useDashboard";
 
 import {
@@ -27,72 +29,77 @@ import {
 
 export default function DashboardPage() {
   const { data, isLoading } = useDashboard();
-  console.log("xx", data?.data?.currentAmount);
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <main className="flex-1  ">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Current Balance</CardTitle>
-              <CardDescription>
-                Your total assets minus liabilities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">
-                <CurrencyView>{data?.data?.currentAmount}</CurrencyView>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Income</CardTitle>
-              <CardDescription>Your total income</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">
-                <CurrencyView>{data?.data?.totalIncome}</CurrencyView>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Expenses</CardTitle>
-              <CardDescription>Your total expenses</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">
-                <CurrencyView>{data?.data?.totalExpense}</CurrencyView>
-              </div>
-            </CardContent>
-          </Card>
+      {isLoading ? (
+        <div className="flex w-full h-[80vh] items-center justify-center">
+          <Loading />
         </div>
-        <div className="flex w-full gap-5 mt-5">
-          <Card className="w-6/12">
-            <CardHeader>
-              <CardTitle>Spending Breakdown</CardTitle>
-              <CardDescription>
-                Your monthly expenses by category
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <PiechartcustomChart className="aspect-[4/3]" />
-            </CardContent>
-          </Card>
-          <Card className="w-6/12">
-            <CardHeader>
-              <CardTitle>Income vs Expenses</CardTitle>
-              <CardDescription>
-                Your monthly income and expenses over time
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <LinechartChart className="aspect-[4/3]" />
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+      ) : (
+        <main className="flex-1  ">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Current Balance</CardTitle>
+                <CardDescription>
+                  Your total assets minus liabilities
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">
+                  <CurrencyView>{data?.data?.currentAmount}</CurrencyView>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Income</CardTitle>
+                <CardDescription>Your total income</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">
+                  <CurrencyView>{data?.data?.totalIncome}</CurrencyView>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Expenses</CardTitle>
+                <CardDescription>Your total expenses</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">
+                  <CurrencyView>{data?.data?.totalExpense}</CurrencyView>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex w-full gap-5 mt-5">
+            <Card className="w-6/12">
+              <CardHeader>
+                <CardTitle>Spending Breakdown</CardTitle>
+                <CardDescription>
+                  Your monthly expenses by category
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PiechartcustomChart className="aspect-[4/3]" />
+              </CardContent>
+            </Card>
+            <Card className="w-6/12">
+              <CardHeader>
+                <CardTitle>Income vs Expenses</CardTitle>
+                <CardDescription>
+                  Your monthly income and expenses over time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LinechartChart className="aspect-[4/3]" />
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      )}
     </div>
   );
 }

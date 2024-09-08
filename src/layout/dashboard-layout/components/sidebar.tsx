@@ -13,18 +13,11 @@ const Sidebar = () => {
           className="flex items-center gap-2 font-bold"
           prefetch={false}
         >
-          <CheckCircledIcon className="h-6 w-6" />
-          <span className="text-lg font-bold tracking-tight transition-all duration-300 data-[collapsed=true]:opacity-0 data-[collapsed=true]:scale-0">
+          <img src="/logo.png" className="w-6" />
+          <span className="text-lg font-bold tracking-tight transition-all duration-300 data-[collapsed=true]:opacity-0 data-[collapsed=true]:scale-0 text-primary">
             Budget Buddy
           </span>
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full data-[collapsed=true]:rotate-180"
-        >
-          <CheckCircledIcon className="h-5 w-5" />
-        </Button>
       </div>
       <nav className="flex flex-1 flex-col overflow-y-auto px-4 space-y-2 py-6">
         {DashboardItems.map((item: DashboardItemType, index) => {
