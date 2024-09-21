@@ -23,6 +23,8 @@ import { Account } from "@/lib/services/account";
 import useAccount from "@/hooks/api/useAccount";
 import { capitalize } from "@/lib/utils";
 import { Account as AccountType } from "@/models/Account";
+import useResponsive from "@/hooks/useResponsive";
+import DrawerView from "../drawer-view";
 
 const formSchema = z.object({
   name: z.string(),
@@ -40,12 +42,34 @@ const AccountModal = () => {
   const [currentAccountType, setAccountType] = useState<string | null>(null);
   const { addAccountModal, setAccountModal } = useModalStore((state) => state);
   const { show, data } = addAccountModal;
-
+  const { isMobile } = useResponsive();
   useEffect(() => {
     if (data) {
       setAccountType(capitalize(data.type));
     }
   }, [data]);
+
+  if (isMobile) {
+    return (
+      <DrawerView
+        title={`${data ? "Update" : "Add"} Account`}
+        open={show}
+        onOpenChange={(value: boolean) => {
+          if (!value) {
+            setAccountModal(false);
+          }
+        }}
+      >
+        <div className="py-3 px-3">
+          <AccountData
+            currentAccountType={currentAccountType}
+            setAccountType={setAccountType}
+            data={data}
+          />
+        </div>
+      </DrawerView>
+    );
+  }
 
   return (
     <Dialog
@@ -66,39 +90,73 @@ const AccountModal = () => {
           </DialogTitle>
         </DialogHeader>
 
-        {!currentAccountType ? (
-          <div className="flex justify-between gap-2">
-            {GridItems.map((item) => {
-              return (
-                <div
-                  key={item[0]}
-                  className="flex flex-col justify-center items-center rounded-md border dark:border-gray-400 w-full py-5 cursor-pointer hover:border-gray-600 dark:hover:border-white"
-                  onClick={() => {
-                    setAccountType(item[1]);
-                  }}
-                >
-                  <Icon icon={item[0]} className="w-12" />
-                  <div className="text-[14px] mt-2">{item[1]}</div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="grid gap-4 py-4">
-            <AccountForm
-              account={data}
-              type={currentAccountType}
-              setType={(type) => {
-                setAccountType(type);
-              }}
-            />
-          </div>
-        )}
+        <AccountData
+          currentAccountType={currentAccountType}
+          setAccountType={setAccountType}
+          data={data}
+        />
       </DialogContent>
     </Dialog>
   );
 };
 
+const AccountData = ({
+  currentAccountType,
+  setAccountType,
+  data,
+}: {
+  currentAccountType?: string | null;
+  setAccountType: (type: string) => void;
+  data: AccountType;
+}) => {
+  return (
+    <>
+      {!currentAccountType ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 justify-between gap-2">
+          {GridItems.map((item) => {
+            return (
+              <AccountGridItem
+                key={item[0]}
+                item={item}
+                setAccountType={setAccountType}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="grid gap-4 py-4">
+          <AccountForm
+            account={data}
+            type={currentAccountType}
+            setType={(type) => {
+              setAccountType(type);
+            }}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+const AccountGridItem = ({
+  item,
+  setAccountType,
+}: {
+  item: string[];
+  setAccountType: (item: string) => void;
+}) => {
+  return (
+    <div
+      className="flex flex-col justify-center items-center rounded-md border dark:border-gray-400 w-full py-5 cursor-pointer hover:border-gray-600 dark:hover:border-white"
+      onClick={() => {
+        setAccountType(item[1]);
+      }}
+    >
+      <Icon icon={item[0]} className="w-12" />
+      <div className="text-[14px] mt-2">{item[1]}</div>
+    </div>
+  );
+};
 const AccountForm = ({
   account,
   type,

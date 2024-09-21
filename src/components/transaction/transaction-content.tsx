@@ -18,6 +18,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useEffect } from "react";
 import { isValidJSON } from "@/lib/utils";
 import { Spinner } from "../ui/spinner";
+import { Transaction } from "@/models";
+import clsx from "clsx";
 
 type PeopleType = "pay" | "receive" | "lend" | "borrow";
 
@@ -35,7 +37,7 @@ const formSchema = z.object({
 });
 
 const TransactionContent: React.FC<{
-  data: any;
+  data: Transaction;
   loading: boolean;
   value: TransactionType;
   onSubmit: (values: any) => void;
@@ -96,9 +98,9 @@ const TransactionContent: React.FC<{
                 onSubmit(form.getValues());
               }}
               disabled={loading}
-              className="gap-1"
+              className={"text-xs sm:text-base"}
             >
-              {loading && <Spinner className="text-white w-4 " />}
+              {loading && <Spinner className="text-white w-4  " />}
               {data ? "Update" : "Add"} Transaction
             </Button>
           </div>

@@ -3,6 +3,8 @@ import Loading from "../loader";
 import { Category } from "@/models";
 import { Icon } from "../icon";
 import clsx from "clsx";
+import CategorySelector from "./CategorySelector";
+import useResponsive from "@/hooks/useResponsive";
 
 type CategoryGridProps = {
   type: "expense" | "income";
@@ -16,16 +18,26 @@ const CategoryGrid: React.FC<CategoryGridProps> = ({
   onChange,
 }) => {
   const { data, isLoading } = useCategory();
+  const { isMobile } = useResponsive();
   const categoryData = data?.data?.filter(
     (item: Category) => item?.categoryType.toLowerCase() == type
   );
-
-  if (isLoading)
+  if (isLoading) {
     return (
       <div>
         <Loading />
       </div>
     );
+  }
+  if (isMobile) {
+    return (
+      <CategorySelector
+        data={categoryData || []}
+        value={value}
+        onChange={onChange}
+      />
+    );
+  }
 
   return (
     <div className="grid grid-cols-4 gap-3 max-h-[200px] overflow-y-auto">
@@ -45,7 +57,7 @@ const CategoryGrid: React.FC<CategoryGridProps> = ({
   );
 };
 
-const CategoryGridItem = ({
+export const CategoryGridItem = ({
   item,
   isSelected,
   onClick,
@@ -72,7 +84,7 @@ const CategoryGridItem = ({
           />
         </div>
       </div>
-      <p className="text-xs mt-2 truncate">{item.categoryName}</p>
+      <p className="text-[10px] sm:text-xs mt-2 truncate">{item.categoryName}</p>
     </div>
   );
 };

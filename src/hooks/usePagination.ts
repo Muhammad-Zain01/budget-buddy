@@ -24,7 +24,8 @@ const usePagination = <T extends string[]>(items: T, itemsPerPage: number) => {
     setPage((prev) => prev - 1);
   };
   const showPrev = page != 1;
-  const showNext = page <= totalPages && page >= 1;
+  const showNext = items.length != itemsPerPage && page <= totalPages;
+
   return {
     page,
     items: Items,

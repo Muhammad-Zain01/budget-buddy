@@ -12,16 +12,45 @@ import {
 import useAlertDialoag from "@/hooks/useAlertDialog";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
+import useResponsive from "@/hooks/useResponsive";
+import DrawerView from "./drawer-view";
+import { Button } from "./ui/button";
 
 export function AlertModal() {
   const { close, show, action } = useAlertDialoag();
   const [loading, setLoading] = useState<boolean>(false);
+  const { isMobile } = useResponsive();
 
   const handleAction = async () => {
     setLoading(true);
     await action();
     setLoading(false);
   };
+
+  if (isMobile) {
+    return (
+      <DrawerView
+        open={show}
+        title="Are you sure?"
+        onOpenChange={(e) => {
+          if (!e) {
+            close();
+          }
+        }}
+      >
+        <div className="flex  flex-col w-full gap-2 py-4">
+          <Button onClick={handleAction} disabled={loading}>
+            {loading && <Spinner className="text-white w-4 " />}
+            Continue
+          </Button>
+          <Button variant={"outline"} onClick={close}>
+            Cancel
+          </Button>
+        </div>
+      </DrawerView>
+    );
+  }
+
   return (
     <AlertDialog open={show}>
       <AlertDialogContent>

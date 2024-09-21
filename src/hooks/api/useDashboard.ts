@@ -1,6 +1,5 @@
 import request from "@/lib/request";
 import { Response } from "@/models";
-import { Account } from "@/models/Account";
 import { useQuery } from "@tanstack/react-query";
 
 const useDashboard = () => {

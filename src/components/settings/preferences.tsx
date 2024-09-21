@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Input } from "../ui/input";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,50 +19,57 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useEffect, useMemo } from "react";
 import Loading from "../loader";
-
-import currencies from "@/constants/currencies";
 import CurrencySelector from "../ui/currency-selector";
+import useCurrentUser from "@/hooks/api/useCurrentUser";
+import { useEffect, useState } from "react";
+import { toast } from "../ui/use-toast";
+import { user } from "@/lib/services/user";
 
 const Preferences = () => {
-  const { data, status } = useSession();
-  const user = data?.user;
+  const { status } = useSession();
+  const { data } = useCurrentUser();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const currency = data?.data?.currency || "";
 
   const formSchema = z.object({
-    currency: z.string(),
-    email: z.string().email(),
-    currentPassword: z.string(),
-    newPassword: z.string(),
+    currency: z.string().min(1, "Currency is required"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      currency: "",
+      currency: currency,
     },
   });
 
   useEffect(() => {
-    if (user) {
-      form.setValue("name", user?.name as string);
-      form.setValue("email", user?.email as string);
+    if (currency) {
+      form.setValue("currency", currency as string);
     }
-    // eslint-disable-next-line
-  }, [user]);
+  }, [currency, form]);
 
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+    try {
+      const response = await user.updateUser(values);
+      console.log(response);
+      toast({
+        title: "Success",
+        description: "Your preferences have been updated.",
+      });
+    } catch (error) {
+      console.error("Error updating preferences:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update preferences. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  const Currency = useMemo(
-    () =>
-      currencies.map((c) => ({
-        label: c.label,
-        value: c.code,
-      })),
-    []
-  );
 
   return (
     <Card>
@@ -72,7 +78,7 @@ const Preferences = () => {
         <CardDescription>Update your Preferences.</CardDescription>
       </CardHeader>
       <CardContent>
-        {status == "loading" ? (
+        {status === "loading" ? (
           <div className="flex justify-center items-center h-[400px]">
             <Loading />
           </div>
@@ -95,9 +101,8 @@ const Preferences = () => {
                 />
               </div>
               <div className="mt-5 flex">
-                <Button type="submit" className="gap-1">
-                  {/* {loading && <Spinner className="text-white w-4 " />} */}
-                  Save Changes
+                <Button type="submit" className="gap-1" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </Button>
               </div>
             </form>

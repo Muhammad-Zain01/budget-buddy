@@ -2,13 +2,16 @@
 
 import useModalStore from "@/store/modal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import TransactionContent from "./transaction-content";
 import { useToast } from "../ui/use-toast";
 import useTransaction from "@/hooks/api/useTransaction";
 import { Transaction } from "@/lib/services/transaction";
 import useAccount from "@/hooks/api/useAccount";
+import { Transaction as TransactionDataType } from "@/models";
+import useResponsive from "@/hooks/useResponsive";
+import DrawerView from "../drawer-view";
 
 export type TransactionType = "expense" | "income" | "transfer" | "people";
 
@@ -34,6 +37,7 @@ const Items: { title: string; value: TransactionType }[] = [
 const TransactionModal = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState<TransactionType>("expense");
+  const { isMobile } = useResponsive();
   const { toast } = useToast();
   const { refetch } = useTransaction();
   const { data: accountData } = useAccount();
@@ -89,6 +93,7 @@ const TransactionModal = () => {
 
     return true;
   };
+
   const onSubmit = async (values: any) => {
     if (!validation(values)) return false;
 
@@ -135,6 +140,29 @@ const TransactionModal = () => {
     setLoading(false);
   };
 
+  if (isMobile) {
+    return (
+      <DrawerView
+        title={`${data ? "Update" : "Add"} Transaction`}
+        open={show}
+        onOpenChange={(e) => {
+          if (!e) {
+            setAddTransactionModal(e);
+          }
+        }}
+        height="550px"
+      >
+        <TransactionChildren
+          defaultTabValue={defaultTabValue}
+          setSelectedTab={setSelectedTab}
+          data={data}
+          loading={loading}
+          onSubmit={onSubmit}
+        />
+      </DrawerView>
+    );
+  }
+
   return (
     <Dialog
       open={show}
@@ -146,37 +174,65 @@ const TransactionModal = () => {
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Add"} Transaction</DialogTitle>
         </DialogHeader>
-        <div>
-          <Tabs
-            defaultValue={defaultTabValue}
-            className="w-full"
-            onValueChange={(value) => setSelectedTab(value as TransactionType)}
-          >
-            <TabsList className="grid w-full grid-cols-4">
-              {Items.map((item) => {
-                return (
-                  <TabsTrigger key={item.value} value={item.value}>
-                    {item.title}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-            {Items.map((item) => {
-              return (
-                <TabsContent key={item.value} value={item.value}>
-                  <TransactionContent
-                    data={data}
-                    loading={loading}
-                    value={item.value}
-                    onSubmit={onSubmit}
-                  />
-                </TabsContent>
-              );
-            })}
-          </Tabs>
-        </div>
+        <TransactionChildren
+          defaultTabValue={defaultTabValue}
+          setSelectedTab={setSelectedTab}
+          data={data}
+          loading={loading}
+          onSubmit={onSubmit}
+        />
       </DialogContent>
     </Dialog>
+  );
+};
+
+const TransactionChildren = ({
+  defaultTabValue,
+  setSelectedTab,
+  data,
+  loading,
+  onSubmit,
+}: {
+  defaultTabValue: TransactionType;
+  setSelectedTab: Dispatch<SetStateAction<TransactionType>>;
+  data: TransactionDataType;
+  loading: boolean;
+  onSubmit: (values: any) => void;
+}) => {
+  return (
+    <div className="  px-3 overflow-y-scroll">
+      <Tabs
+        defaultValue={defaultTabValue}
+        className="w-full"
+        onValueChange={(value) => setSelectedTab(value as TransactionType)}
+      >
+        <TabsList className="grid w-full grid-cols-4">
+          {Items.map((item) => {
+            return (
+              <TabsTrigger
+                key={item.value}
+                value={item.value}
+                className="text-xs md:text-sm"
+              >
+                {item.title}
+              </TabsTrigger>
+            );
+          })}
+        </TabsList>
+        {Items.map((item) => {
+          return (
+            <TabsContent key={item.value} value={item.value}>
+              <TransactionContent
+                data={data}
+                loading={loading}
+                value={item.value}
+                onSubmit={onSubmit}
+              />
+            </TabsContent>
+          );
+        })}
+      </Tabs>
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import usePagination from "@/hooks/usePagination";
 import { Icon } from "../icon";
 import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import useResponsive from "@/hooks/useResponsive";
 
 type ComponentProps = {
   value: string;
@@ -12,9 +13,10 @@ const CategoryIconSelector: React.FC<ComponentProps> = ({
   value,
   onChange,
 }) => {
+  const { isMobile } = useResponsive();
   const { items, next, prev, showPrev, showNext } = usePagination<string[]>(
     icons,
-    14
+    isMobile ? 8 : 14
   );
 
   return (
@@ -57,7 +59,7 @@ const SelectorItem = ({
   return (
     <div
       className={clsx(
-        "w-[12%] h-[50px] flex justify-center items-center dark:border-gray-600 border rounded-sm hover:border-gray-400 dark:hover:border-gray-100  cursor-pointer",
+        "w-[20%] md:w-[12%] h-[50px] flex justify-center items-center dark:border-gray-600 border rounded-sm hover:border-gray-400 dark:hover:border-gray-100  cursor-pointer",
         value == icon ? "border-gray-600 dark:border-white" : "border-gray-200"
       )}
       onClick={onClick}

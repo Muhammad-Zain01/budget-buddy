@@ -35,6 +35,8 @@ import { Category } from "@/lib/services/category";
 import { useState } from "react";
 import useCategory from "@/hooks/api/useCategory";
 import { Spinner } from "../ui/spinner";
+import DrawerView from "../drawer-view";
+import useResponsive from "@/hooks/useResponsive";
 
 const formSchema = z.object({
   categoryName: z.string(),
@@ -43,9 +45,28 @@ const formSchema = z.object({
 });
 
 const CategoryModal = () => {
+  const { isMobile } = useResponsive();
   const { addCategoryModal, setAddCategoryModal } = useModalStore(
     (state) => state
   );
+
+  if (isMobile) {
+    return (
+      <DrawerView
+        title={`${addCategoryModal?.data ? "Update" : "Add"} Category`}
+        open={addCategoryModal.show}
+        onOpenChange={(value: boolean) => {
+          if (!value) {
+            setAddCategoryModal(false);
+          }
+        }}
+      >
+        <div className="py-3 px-1">
+          <CategoryForm />
+        </div>
+      </DrawerView>
+    );
+  }
 
   return (
     <Dialog
@@ -76,7 +97,6 @@ const CategoryForm = () => {
   );
 
   const data = addCategoryModal.data;
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -111,6 +131,7 @@ const CategoryForm = () => {
     }
     setLoading(false);
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

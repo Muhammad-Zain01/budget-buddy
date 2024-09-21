@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import CalculatorModal from "../calculator-modal";
 import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import CurrencyView from "../ui/currency-view";
 
 const TransactionInput = ({ form }: { form: any }) => {
   const [calculatorModal, setCalculatorModal] = useState(false);
@@ -15,12 +16,14 @@ const TransactionInput = ({ form }: { form: any }) => {
           <FormItem>
             <FormControl>
               <div className="flex items-center pl-3 pr-2 gap-2 border rounded-md">
-                <span className="font-[400]">PKR</span>
+                <span className="font-[400]">
+                  <CurrencyView />
+                </span>
                 <Input
                   placeholder="Enter Amount..."
                   type="number"
                   {...field}
-                  className="border-none focus-visible:ring-0 shadow-none text-[16px]"
+                  className="border-none  focus-visible:ring-0 shadow-none text-[13px] md:text-[16px]"
                 />
                 <span
                   className="cursor-pointer"
@@ -28,7 +31,7 @@ const TransactionInput = ({ form }: { form: any }) => {
                     setCalculatorModal(true);
                   }}
                 >
-                  <Calculator />
+                  <Calculator className="w-[16px] md:w-[22px]" />
                 </span>
               </div>
             </FormControl>

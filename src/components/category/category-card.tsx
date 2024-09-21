@@ -15,14 +15,16 @@ const CategoryCard: React.FC<ComponentProps> = ({ category, onDelete }) => {
           <div className="bg-accent p-2 rounded-full">
             <Icon
               icon={category.icon}
-              className="w-8 h-8 text-accent-foreground dark:brightness-0 dark:invert"
+              className="w-6 h-6 md:w-8 md:h-8  text-accent-foreground dark:brightness-0 dark:invert"
             />
           </div>
-          <div className="text-gray-600 dark:text-gray-100 text-[14px] mt-1">
+          <div className="text-gray-600 text-center text-xs md:text-sm dark:text-gray-100 text-[14px] mt-1">
             {category.categoryName}
           </div>
         </div>
-        <CategoryDropdown category={category} onDelete={onDelete} />
+        {!category.isPrimary && (
+          <CategoryDropdown category={category} onDelete={onDelete} />
+        )}
       </div>
     </Card>
   );

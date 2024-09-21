@@ -17,6 +17,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import errors from "@/lib/error";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -43,18 +44,17 @@ const LoginForm = () => {
       password: value.password,
       redirect: false,
     } as { username: string; password: string; redirect: boolean });
+    console.log(response);
     if (response?.ok) {
       toast({
-        title: "Account Created Successfully",
+        title: "Account Login Successfully",
       });
       router.push("/dashboard");
     } else {
-      if (response?.error) {
-        toast({
-          variant: "destructive",
-          title: response?.error,
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: errors?.[response?.error] || "Log in Error",
+      });
     }
   };
 
@@ -75,8 +75,10 @@ const LoginForm = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Log in to your Account</h1>
-        <p className="text-sm text-neutral-500">
+        <h1 className="text-lg md:text-2xl font-semibold">
+          Log in to your Account
+        </h1>
+        <p className="text-xs md:text-sm text-neutral-500">
           Welcome back! Select method to log in:
         </p>
       </div>

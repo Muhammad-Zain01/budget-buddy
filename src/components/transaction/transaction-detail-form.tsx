@@ -20,7 +20,7 @@ const TransactionDetailForm = ({ form }: { form: any }) => {
             <FormItem>
               <FormLabel>Date</FormLabel>
               <FormControl>
-                <DatePicker {...field} className="w-full" />
+                <DatePicker {...field} className="w-full text-[13px] md:text-[16px]" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -33,7 +33,11 @@ const TransactionDetailForm = ({ form }: { form: any }) => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Description..." {...field} />
+                <Textarea
+                  placeholder="Description..."
+                  className="text-[13px] md:text-[16px]"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -49,7 +53,7 @@ const TransactionDetailForm = ({ form }: { form: any }) => {
                 <InputTags
                   {...field}
                   placeholder="Enter Tags..."
-                  className="w-full"
+                  className="w-full text-[13px] md:text-[16px]"
                 />
               </FormControl>
               <FormMessage />

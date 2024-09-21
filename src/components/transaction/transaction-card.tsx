@@ -114,14 +114,14 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
               <Icon icon={icon} className="w-8 h-8 text-accent-foreground " />
             </div>
 
-            <div className="text-gray-600 dark:text-gray-100 text-[14px] mt-1 flex flex-col">
+            <div className="text-gray-600 dark:text-gray-100 text-[12px] md:text-[14px] mt-1 flex flex-col ">
               {title}
-              <span className="text-xs text-neutral-400">{subTitle}</span>
+              <span className="text-xs  text-neutral-400 ">{subTitle}</span>
             </div>
           </div>
           <div className="flex flex-col justify-center items-end w-full text-sm text-gray-600 dark:text-gray-100 font-[500]">
             <span
-              className={clsx({
+              className={clsx("text-xs md:text-sm", {
                 "text-red-700": type == "expense",
                 "text-green-700": type == "income",
               })}

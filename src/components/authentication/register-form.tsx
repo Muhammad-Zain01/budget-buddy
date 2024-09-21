@@ -48,19 +48,25 @@ const RegisterForm = () => {
     };
 
     const response = await createUser(data);
+    console.log("xx", response);
     if (response?.status) {
       toast({
         title: "Account Created Successfully",
       });
       router.push("/login");
+    } else {
+      toast({
+        title: response?.message || "Something wrong",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Create an account</h1>
-        <p className="text-sm text-neutral-500">
+        <h1 className="text-lg md:text-2xl font-semibold">Create an account</h1>
+        <p className="md:text-sm text-xs text-neutral-500">
           Welcome back! please create account to continue:
         </p>
       </div>
@@ -73,7 +79,7 @@ const RegisterForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="">Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your full name." {...field} />
                   </FormControl>

@@ -19,8 +19,8 @@ const CategoryTabs: React.FC<ComponentProps> = ({
           <TabsTrigger
             value="income"
             className={clsx(
-              "px-3",
-              active === "income" && "bg-primary text-primary-foreground"
+              "px-3 text-xs md:text-sm",
+              active === "income" && "bg-white  text-black"
             )}
             onClick={() => onChange("income")}
           >
@@ -29,8 +29,8 @@ const CategoryTabs: React.FC<ComponentProps> = ({
           <TabsTrigger
             value="expense"
             className={clsx(
-              "px-3",
-              active === "expense" && "bg-primary text-primary-foreground "
+              "px-3 text-xs md:text-sm",
+              active === "expense" && "bg-white text-black "
             )}
             onClick={() => onChange("expense")}
           >

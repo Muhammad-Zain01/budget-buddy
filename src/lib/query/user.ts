@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { VerifyPassword } from "../auth";
 
 const user = {
   getUser: async (username: string) => {
@@ -62,6 +63,33 @@ const user = {
         password: data.password,
         isVerfied: data.isVerfied,
       },
+    });
+  },
+  checkUserPassword: async (userId: number, password: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        password: true,
+      },
+    });
+
+    if (!user) {
+      return false;
+    }
+
+    return await VerifyPassword(password, user.password);
+  },
+  updateUser: async (
+    userId: number,
+    data: { currency?: string; password?: string; name?: string }
+  ) => {
+    return await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: data,
     });
   },
 };
