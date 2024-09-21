@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +17,7 @@ import { signIn } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import errors from "@/lib/error";
+import GoogleButton from "./google-button";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -58,20 +58,6 @@ const LoginForm = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    const response = await signIn("google", { redirect: false });
-    console.log("response", response);
-    if (response?.error) {
-      toast({
-        variant: "destructive",
-        title: "Failed to login with Google",
-        description: response.error,
-      });
-    } else {
-      router.push("/dashboard");
-    }
-  };
-
   return (
     <div>
       <div className="mb-8">
@@ -84,21 +70,24 @@ const LoginForm = () => {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="space-y-1">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email or Username</FormLabel>
+                  <FormLabel className="text-sm font-medium">
+                    Email or Username
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your Email or Username"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
@@ -107,25 +96,39 @@ const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-sm font-medium">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="Enter your password"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit" className="w-full mt-5 h-10">
+          <Button
+            type="submit"
+            className="w-full py-2 text-white bg-primary hover:bg-primary-dark transition duration-300"
+          >
             Login
           </Button>
-          <Button onClick={handleGoogleLogin} className="mt-2 w-full">
-            Login with Google
-          </Button>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <GoogleButton label="Login with Google" />
         </form>
       </Form>
 

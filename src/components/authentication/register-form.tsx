@@ -16,6 +16,7 @@ import Link from "next/link";
 import useUser from "@/hooks/api/useUser";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import GoogleButton from "./google-button";
 
 const formSchema = z.object({
   name: z.string(),
@@ -72,7 +73,7 @@ const RegisterForm = () => {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-1">
             <FormField
               control={form.control}
@@ -134,6 +135,17 @@ const RegisterForm = () => {
           <Button type="submit" className="w-full mt-5 h-10">
             Register
           </Button>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <GoogleButton label="Register with Google" />
         </form>
       </Form>
       <div className="text-center mt-5 text-sm text-neutral-500">

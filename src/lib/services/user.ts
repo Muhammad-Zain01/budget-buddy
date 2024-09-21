@@ -4,7 +4,8 @@ import request from "../request";
 export const user = {
   updateUser: async (data: {
     currency?: string;
-    password?: string;
+    newPassword?: string;
+    currentPassword?: string;
     name?: string;
   }) => {
     try {

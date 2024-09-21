@@ -35,8 +35,10 @@ export default async function handler(
           .json({ status: 0, message: errors.NEW_PASSWORD_SAME_AS_CURRENT });
       }
 
-      const hashedPassword = await HashPassword(body?.currentPassword);
-      const isPasswordCorrect = user.checkUserPassword(userId, hashedPassword);
+      const isPasswordCorrect = await user.checkUserPassword(
+        userId,
+        body?.currentPassword
+      );
 
       if (!isPasswordCorrect) {
         return res
@@ -44,7 +46,6 @@ export default async function handler(
           .json({ status: 0, message: errors.INCORRECT_PASSWORD });
       }
       const newHashedPassword = await HashPassword(body?.newPassword);
-
       user.updateUser(userId, { password: newHashedPassword });
     } else if (body?.currency) {
       user.updateUser(userId, { currency: body?.currency });

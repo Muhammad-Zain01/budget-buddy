@@ -75,6 +75,8 @@ const user = {
       },
     });
 
+    console.log(user, password)
+
     if (!user) {
       return false;
     }
