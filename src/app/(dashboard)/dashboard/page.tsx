@@ -74,8 +74,8 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-          <div className="flex w-full gap-5 mt-5">
-            <Card className="w-6/12">
+          <div className="flex flex-col md:flex-row w-full gap-5 mt-5">
+            <Card className="w-full md:w-6/12">
               <CardHeader>
                 <CardTitle>Spending Breakdown</CardTitle>
                 <CardDescription>
@@ -86,7 +86,7 @@ export default function DashboardPage() {
                 <PiechartcustomChart className="aspect-[4/3]" />
               </CardContent>
             </Card>
-            <Card className="w-6/12">
+            <Card className="w-full md:w-6/12">
               <CardHeader>
                 <CardTitle>Income vs Expenses</CardTitle>
                 <CardDescription>

@@ -3,6 +3,8 @@ import { Account } from "@/models/Account";
 import { Icon } from "../icon";
 import { getIcon } from "@/lib/utils";
 import clsx from "clsx";
+import useResponsive from "@/hooks/useResponsive";
+import AccountSelector from "./account-selector";
 
 type AccountGridProps = {
   type?: string;
@@ -17,6 +19,7 @@ const AccountGrid: React.FC<AccountGridProps> = ({
   showAll = false,
 }) => {
   const { data } = useAccount();
+  const { isMobile } = useResponsive();
   const accountData = data?.data?.filter((item) => {
     if (type) {
       if (item.type === type) {
@@ -30,6 +33,17 @@ const AccountGrid: React.FC<AccountGridProps> = ({
     }
     return true;
   });
+
+  if (isMobile) {
+    return (
+      <AccountSelector
+        data={accountData || []}
+        value={value}
+        onChange={onChange}
+      />
+    );
+  }
+
   return (
     <div className="grid grid-cols-4 gap-3 max-h-[200px] overflow-y-auto">
       {accountData?.map((item: Account) => {
@@ -48,7 +62,7 @@ const AccountGrid: React.FC<AccountGridProps> = ({
   );
 };
 
-const AccountGridItem = ({
+export const AccountGridItem = ({
   item,
   isSelected,
   onClick,
@@ -71,11 +85,11 @@ const AccountGridItem = ({
         <div className="bg-accent dark:bg-accent-dark p-2 rounded-full">
           <Icon
             icon={getIcon(item.type.toLowerCase()) as string}
-            className="w-8 h-8 text-accent-foreground dark:text-accent-foreground-dark"
+            className="w-7 h-7 md:w-8 md:h-8 text-accent-foreground dark:text-accent-foreground-dark"
           />
         </div>
       </div>
-      <p className="text-xs mt-2 line-clamp-1 text-gray-800 dark:text-gray-200">
+      <p className="text-[10px] sm:text-xs mt-2 truncate text-gray-800 dark:text-gray-200">
         {item.name}
       </p>
     </div>

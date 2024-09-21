@@ -43,7 +43,7 @@ export default function TransactionPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <main className="flex-1 gap-6 p-6">
+      <main className="flex-1 gap-6">
         <div className="bg-background rounded-lg flex justify-end">
           <AddButton
             label="Add Transactions"

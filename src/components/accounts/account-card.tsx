@@ -22,18 +22,18 @@ const AccountCard = ({ account, onDelete }: any) => {
             {}
             <Icon
               icon={getIcon(account.type.toLowerCase()) as string}
-              className="w-8 h-8 text-accent-foreground dark:brightness-0 dark:invert"
+              className="w-6 h-6 md:w-8 md:h-8  text-accent-foreground dark:brightness-0 dark:invert"
             />
           </div>
 
-          <div className="text-gray-600 dark:text-gray-100 text-[14px] mt-1">
+          <div className="text-gray-600 text-xs md:text-sm dark:text-gray-100 text-[14px] mt-1">
             {account.name}
           </div>
         </div>
         <div className="flex items-center justify-end w-[70px]">
           <div
             className={clsx(
-              "text-ellipsis overflow-hidden text-nowrap text-sm text-gray-600 dark:text-gray-100 font-[500]",
+              "text-ellipsis overflow-hidden text-nowrap text-xs md:text-sm text-gray-600 dark:text-gray-100 font-[500]",
               account.balance < 0 && "text-red-500"
             )}
           >

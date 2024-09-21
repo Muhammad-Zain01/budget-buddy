@@ -48,8 +48,8 @@ export default function CategoryPage() {
   }, [activeTab, data]);
 
   return (
-    <div className="flex flex-col h-full">
-      <main className="flex-1 gap-6 p-6">
+    <div className="flex flex-col h-full mt-2">
+      <main className="flex-1 gap-6">
         <div className="bg-background rounded-lg">
           <CategoryTabs
             active={activeTab}
@@ -61,7 +61,7 @@ export default function CategoryPage() {
           ) : (
             <>
               {categoryData?.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {categoryData.map((category: Category) => (
                     <CategoryCard
                       key={category.id}
