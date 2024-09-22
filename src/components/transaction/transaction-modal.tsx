@@ -111,7 +111,6 @@ const TransactionModal = () => {
     const payload = {
       balance: values?.amount,
       type: selectedTab,
-      date: new Date(values.date).toISOString(),
       tags: values?.tags || [],
       description: values?.description || "",
       category: values?.category ? Number(values?.category) : undefined,

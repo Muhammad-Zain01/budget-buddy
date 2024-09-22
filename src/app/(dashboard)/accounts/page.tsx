@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Account } from "@/lib/services/account";
 import useAlertDialoag from "@/hooks/useAlertDialog";
 import EmptyRecord from "@/components/empty-record";
+import { useMemo } from "react";
 
 export default function AccountPage() {
   const { data, isLoading, refetch } = useAccount();
@@ -29,6 +30,19 @@ export default function AccountPage() {
     close();
   };
 
+  const accountData = useMemo(() => {
+    if (!data?.data) return [];
+
+    return data.data.sort((a, b) => {
+      // Sort by account type first
+      if (a.type !== b.type) {
+        return a.type.localeCompare(b.type);
+      }
+      // Then sort by balance (descending)
+      return Number(b.balance) - Number(a.balance);
+    });
+  }, [data]);
+
   return (
     <div className="flex flex-col h-full">
       <main className="flex-1 gap-6">
@@ -42,9 +56,10 @@ export default function AccountPage() {
           <Loading fullPage />
         ) : (
           <>
-            {data?.data?.length > 0 ? (
+            {/* @ts-ignore */}
+            {accountData?.length > 0 ? (
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {data?.data?.map((account, index) => (
+                {accountData?.map((account, index) => (
                   <AccountCard
                     key={index}
                     account={account}

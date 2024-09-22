@@ -84,7 +84,7 @@ export const CategoryGridItem = ({
           />
         </div>
       </div>
-      <p className="text-[10px] sm:text-xs mt-2 truncate">{item.categoryName}</p>
+      <p className="text-[10px]  mt-2 truncate">{item.categoryName}</p>
     </div>
   );
 };

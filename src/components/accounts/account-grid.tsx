@@ -89,7 +89,7 @@ export const AccountGridItem = ({
           />
         </div>
       </div>
-      <p className="text-[10px] sm:text-xs mt-2 truncate text-gray-800 dark:text-gray-200">
+      <p className="text-[10px]  mt-2 truncate text-gray-800 dark:text-gray-200">
         {item.name}
       </p>
     </div>

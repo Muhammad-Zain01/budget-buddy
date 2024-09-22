@@ -1,5 +1,7 @@
 import prisma from "@/lib/db";
 import { Transaction } from "@prisma/client";
+import { skip } from "node:test";
+import { getMonthDateRange } from "../utils";
 
 const transaction = {
   add: async (data: Transaction) => {
@@ -41,10 +43,31 @@ const transaction = {
       },
     });
   },
-  getTransactionByUser: async (userId: number) => {
-    return await prisma.transaction.findMany({
+  getTransactionByUser: async (
+    userId: number,
+    selectedMonth: number | undefined,
+    selectedYear: number | undefined,
+    page,
+    pageSize = 12
+  ) => {
+    const { startDate, endDate } = getMonthDateRange(
+      selectedYear,
+      selectedMonth
+    );
+
+    const skip = (page - 1) * pageSize;
+    const transactions = await prisma.transaction.findMany({
       where: {
         userId: userId,
+        ...(selectedMonth !== undefined &&
+          selectedYear !== undefined &&
+          startDate !== null &&
+          endDate !== null && {
+            createdAt: {
+              gte: new Date(startDate),
+              lte: new Date(endDate),
+            },
+          }),
       },
       select: {
         id: true,
@@ -63,7 +86,38 @@ const transaction = {
         toAccount: true,
         toId: true,
       },
+      skip: skip,
+      take: pageSize,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
+
+    const totalCount = await prisma.transaction.count({
+      where: {
+        userId: userId,
+        ...(selectedMonth !== undefined &&
+          selectedYear !== undefined && {
+            createdAt: {
+              gte: new Date(selectedYear, selectedMonth, 1),
+              lt: new Date(selectedYear, selectedMonth + 1, 1),
+            },
+          }),
+      },
+    });
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    return {
+      transactions,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalCount,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    };
   },
 };
 

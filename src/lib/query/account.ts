@@ -63,8 +63,10 @@ const account = {
         },
       },
     });
+    
     const updatedAccounts = accountsWithUpdatedBalance.map((account) => {
-      let updatedBalance = account.balance;
+      const initialBalance = account.balance;
+      let updatedBalance = initialBalance;
 
       const debits = account.fromTransactions.reduce((total, transaction) => {
         if (
@@ -94,6 +96,7 @@ const account = {
         id: account.id,
         name: account.name,
         type: account.type,
+        initialBalance: initialBalance,
         balance: updatedBalance,
         createdAt: account.createdAt,
         status: account.status,
@@ -102,7 +105,14 @@ const account = {
 
     return updatedAccounts;
   },
-  getDashboardDataByUser: async (userId: number) => {
+  getDashboardDataByUser: async (
+    userId: number,
+    selectedMonth: number,
+    selectedYear: number
+  ) => {
+    const startDate = new Date(selectedYear, selectedMonth, 1);
+    const endDate = new Date(selectedYear, selectedMonth + 1, 0);
+
     const accountsWithTransactions = await prisma.account.findMany({
       where: {
         userId: userId,
@@ -115,19 +125,35 @@ const account = {
         createdAt: true,
         status: true,
         fromTransactions: {
+          where: {
+            createdAt: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
           select: {
             amount: true,
             type: true,
             subType: true,
             categoryId: true,
+            category: true,
+            createdAt: true,
           },
         },
         toTransactions: {
+          where: {
+            createdAt: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
           select: {
             amount: true,
             type: true,
             subType: true,
             categoryId: true,
+            category: true,
+            createdAt: true,
           },
         },
       },
@@ -136,20 +162,29 @@ const account = {
     let totalBalance = 0;
     let totalIncome = 0;
     let totalExpense = 0;
-    const spendingBreakdown = {};
+    const spendingBreakdown: Record<string, number> = {};
+    const incomeBreakdown: Record<string, number> = {};
     const incomeVsExpense = { income: 0, expense: 0 };
+    const incomeByDate: Record<string, number> = {};
+    const expenseByDate: Record<string, number> = {};
 
     accountsWithTransactions.forEach((account) => {
       let accountBalance = account.balance;
 
       account.fromTransactions.forEach((transaction) => {
+        const dateKey = transaction.createdAt.toISOString().split("T")[0];
         if (transaction.type === "EXPENSE") {
           totalExpense += transaction.amount;
           accountBalance -= transaction.amount;
           incomeVsExpense.expense += transaction.amount;
-          spendingBreakdown[transaction.categoryId] =
-            (spendingBreakdown[transaction.categoryId] || 0) +
-            transaction.amount;
+
+          const categoryName =
+            transaction.category?.categoryName || "Uncategorized";
+          spendingBreakdown[categoryName] =
+            (spendingBreakdown[categoryName] || 0) + transaction.amount;
+
+          expenseByDate[dateKey] =
+            (expenseByDate[dateKey] || 0) + transaction.amount;
         } else if (
           transaction.type === "TRANSFER" ||
           transaction.type === "PEOPLE"
@@ -159,10 +194,19 @@ const account = {
       });
 
       account.toTransactions.forEach((transaction) => {
+        const dateKey = transaction.createdAt.toISOString().split("T")[0];
         if (transaction.type === "INCOME") {
           totalIncome += transaction.amount;
           accountBalance += transaction.amount;
           incomeVsExpense.income += transaction.amount;
+
+          const categoryName =
+            transaction.category?.categoryName || "Uncategorized";
+          incomeBreakdown[categoryName] =
+            (incomeBreakdown[categoryName] || 0) + transaction.amount;
+
+          incomeByDate[dateKey] =
+            (incomeByDate[dateKey] || 0) + transaction.amount;
         } else if (
           transaction.type === "TRANSFER" ||
           transaction.type === "PEOPLE"
@@ -179,7 +223,10 @@ const account = {
       totalIncome: totalIncome,
       totalExpense: totalExpense,
       spendingBreakdown: spendingBreakdown,
+      incomeBreakdown: incomeBreakdown,
       incomeVsExpense: incomeVsExpense,
+      incomeByDate: incomeByDate,
+      expenseByDate: expenseByDate,
     };
 
     return dashboardData;

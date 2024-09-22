@@ -126,7 +126,6 @@ const AccountData = ({
       ) : (
         <div className="grid gap-4 py-4">
           <AccountForm
-            account={data}
             type={currentAccountType}
             setType={(type) => {
               setAccountType(type);
@@ -158,7 +157,6 @@ const AccountGridItem = ({
   );
 };
 const AccountForm = ({
-  account,
   type,
   setType,
 }: {
@@ -168,18 +166,19 @@ const AccountForm = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { refetch } = useAccount();
-
   const { addAccountModal, setAccountModal } = useModalStore((state) => state);
   const { data } = addAccountModal;
+
+  const balance = data?.initialBalance || data?.balance || 0;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ...(account
+      ...(data
         ? {
-            name: account?.name || "",
-            type: parseFloat(account?.balance) < 0 ? "n" : "p",
-            balance: String(account?.balance),
+            name: data?.name || "",
+            type: parseFloat(data?.balance) < 0 ? "n" : "p",
+            balance: String(balance),
           }
         : {}),
     },

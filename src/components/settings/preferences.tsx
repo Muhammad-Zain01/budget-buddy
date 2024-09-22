@@ -54,7 +54,6 @@ const Preferences = () => {
     setIsSubmitting(true);
     try {
       const response = await user.updateUser(values);
-      console.log(response);
       toast({
         title: "Success",
         description: "Your preferences have been updated.",

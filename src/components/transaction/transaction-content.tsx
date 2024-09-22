@@ -26,7 +26,6 @@ type PeopleType = "pay" | "receive" | "lend" | "borrow";
 const formSchema = z.object({
   amount: z.string(),
   type: z.string(),
-  date: z.date(),
   description: z.string(),
   tags: z.array(z.string()).optional(),
   account: z.string().optional(),
@@ -68,7 +67,6 @@ const TransactionContent: React.FC<{
         data?.type?.toLowerCase() == "income" ? data?.toId : data?.fromId;
       form.setValue("type", data?.type?.toLowerCase());
       data?.amount && form.setValue("amount", String(data?.amount));
-      data?.createdAt && form.setValue("date", new Date(data?.createdAt));
       data?.description && form.setValue("description", data?.description);
       data?.tags &&
         form.setValue(

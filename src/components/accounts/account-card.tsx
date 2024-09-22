@@ -1,19 +1,20 @@
 import { Card } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { Icon } from "../icon";
 import clsx from "clsx";
 import AccountDropdown from "./account-dropdown";
 import { getIcon } from "@/lib/utils";
 import CurrencyView from "../ui/currency-view";
+import { Account } from "@/models";
 
-const AccountCard = ({ account, onDelete }: any) => {
+const AccountCard = ({
+  account,
+  onDelete,
+}: {
+  account: Account;
+  onDelete: (id: number) => void;
+}) => {
+  const balance = Number(account?.balance) || 0;
+
   return (
     <Card className="relative rounded-md">
       <div className="flex  p-5">
@@ -34,10 +35,10 @@ const AccountCard = ({ account, onDelete }: any) => {
           <div
             className={clsx(
               "text-ellipsis overflow-hidden text-nowrap text-xs md:text-sm text-gray-600 dark:text-gray-100 font-[500]",
-              account.balance < 0 && "text-red-500"
+              balance < 0 && "text-red-500"
             )}
           >
-            <CurrencyView>{account.balance}</CurrencyView>
+            <CurrencyView>{balance}</CurrencyView>
           </div>
         </div>
 

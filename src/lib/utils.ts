@@ -42,3 +42,26 @@ export const isValidJSON = (str: string) => {
     return false;
   }
 };
+
+export const getMonthDateRange = (
+  year: number | undefined,
+  month: number | undefined
+) => {
+  if (!year || !month) return { startDate: null, endDate: null };
+
+  const jsMonth = month - 1;
+  const startDate = new Date(year, jsMonth, 1);
+  const lastDay = new Date(year, jsMonth + 1, 0).getDate();
+  const endDate = new Date(year, jsMonth, lastDay);
+  const formatDate = (date: any) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  return {
+    startDate: formatDate(startDate),
+    endDate: formatDate(endDate),
+  };
+};

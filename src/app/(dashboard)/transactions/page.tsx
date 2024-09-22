@@ -12,13 +12,18 @@ import Loading from "@/components/loader";
 import { Transaction as TransactionService } from "@/lib/services/transaction";
 import { useToast } from "@/components/ui/use-toast";
 import EmptyRecord from "@/components/empty-record";
+import PaginationComponent from "@/components/pagination";
 
 export default function TransactionPage() {
-  const { data, isLoading, refetch } = useTransaction();
+  const { data, isLoading, setPage, refetch } = useTransaction();
   const { toast } = useToast();
   const setAddTransactionModal = useModalStore(
     (state) => state.setAddTransactionModal
   );
+
+  const transactions = data?.data?.transactions || [];
+  const pagination = data?.data?.pagination || {};
+  const { currentPage, totalPages } = pagination;
 
   const onDelete = async (id: number) => {
     const response = await TransactionService.remove(id);
@@ -54,9 +59,9 @@ export default function TransactionPage() {
         </div>
         {!isLoading ? (
           <>
-            {data?.data?.length > 0 ? (
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2  gap-4">
-                {data?.data.map((transaction: Transaction, index: number) => (
+            {transactions?.length > 0 ? (
+              <div className="mt-4 grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-4">
+                {transactions.map((transaction: Transaction, index: number) => (
                   <TransactionCard
                     key={index}
                     transaction={transaction}
@@ -68,6 +73,21 @@ export default function TransactionPage() {
             ) : (
               <EmptyRecord title="No Transactions Available" />
             )}
+            <>
+              {totalPages > 1 && (
+                <div className="mt-6">
+                  <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page: number) => {
+                      if (page) {
+                        setPage(page);
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </>
           </>
         ) : (
           <Loading size="sm" fullPage />

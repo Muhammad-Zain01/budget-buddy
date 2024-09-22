@@ -6,4 +6,5 @@ export type Account = {
   name: string;
   type: AccountType;
   status: boolean;
+  initialBalance?: number;
 };

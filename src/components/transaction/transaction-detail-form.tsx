@@ -5,7 +5,6 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
-import DatePicker from "../ui/date-picker";
 import { Textarea } from "../ui/textarea";
 import { InputTags } from "../ui/tag-input";
 
@@ -13,19 +12,6 @@ const TransactionDetailForm = ({ form }: { form: any }) => {
   return (
     <div className="mt-3">
       <div className="space-y-3">
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <FormControl>
-                <DatePicker {...field} className="w-full text-[13px] md:text-[16px]" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="description"

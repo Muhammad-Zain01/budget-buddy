@@ -18,6 +18,7 @@ import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import errors from "@/lib/error";
 import GoogleButton from "./google-button";
+import { useState } from "react";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -29,6 +30,8 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,22 +42,34 @@ const LoginForm = () => {
   const router = useRouter();
 
   const onSubmit = async (value: any) => {
-    const response = await signIn("credentials", {
-      username: value.username,
-      password: value.password,
-      redirect: false,
-    } as { username: string; password: string; redirect: boolean });
-    console.log(response);
-    if (response?.ok) {
-      toast({
-        title: "Account Login Successfully",
-      });
-      router.push("/dashboard");
-    } else {
+    try {
+      setIsLoading(true);
+      const response = await signIn("credentials", {
+        username: value.username,
+        password: value.password,
+        redirect: false,
+      } as { username: string; password: string; redirect: boolean });
+
+      if (response?.ok) {
+        toast({
+          title: "Account Login Successfully",
+        });
+        router.push("/dashboard");
+      } else {
+        toast({
+          variant: "destructive",
+          title:
+            errors?.[response?.error as keyof typeof errors] || "Log in Error",
+        });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       toast({
         variant: "destructive",
-        title: errors?.[response?.error] || "Log in Error",
+        title: "An unexpected error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -115,8 +130,9 @@ const LoginForm = () => {
           <Button
             type="submit"
             className="w-full py-2 text-white bg-primary hover:bg-primary-dark transition duration-300"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
