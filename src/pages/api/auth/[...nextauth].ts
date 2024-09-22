@@ -49,26 +49,27 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user: userData, account, profile }) {
-      if (account?.provider === "google") {
-        // @ts-ignore
-        const email = userData?.email;
-        let existingUser = await user.getUserByEmail(email as string);
-        if (!existingUser) {
-          existingUser = await user.addUser({
-            email: email as string,
-            name: profile?.name || "",
+      if (account?.provider === "google" && userData) {
+        const email = userData.email;
+        if (email) {
+          let existingUser = await user.getUserByEmail(email);
+          if (!existingUser) {
+            existingUser = await user.addUser({
+              email: email,
+              name: profile?.name || "",
+              profileImage: userData.image || "",
+              password: userData.id as string,
+              isVerfied: true,
+            });
+          }
+          if (existingUser) {
             // @ts-ignore
-            profileImage: userData?.image || "",
+            let extendedUserData: ExtendedAdapterUser = { ...existingUser };
             // @ts-ignore
-            password: userData.id,
-            isVerfied: true,
-          });
+            extendedUserData.userId = existingUser.id;
+            return true;
+          }
         }
-        // @ts-ignore
-        let userData: ExtendedAdapterUser = { ...existingUser }; // Ensure userData is of the extended type
-
-        // @ts-ignore
-        userData.userId = existingUser.id;
       }
       return true;
     },
