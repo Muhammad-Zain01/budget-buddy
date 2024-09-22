@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/app/globals.css";
-import { Toaster } from "@/components/ui/toaster";
 
-const inter = Poppins({
+const popins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
@@ -20,7 +19,7 @@ type LayoutProps = {
 const GeneralLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={inter.className}>{children}</body>
+      <body className={popins.className}>{children}</body>
     </html>
   );
 };
