@@ -5,14 +5,12 @@ import { VerifyPassword } from "@/lib/auth";
 import user from "@/lib/query/user";
 import { AdapterUser } from "next-auth/adapters";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-
 interface ExtendedAdapterUser extends AdapterUser {
   userId?: string;
 }
 
 export const authOptions: NextAuthOptions = {
+  debug: true,
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -45,8 +43,8 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     GoogleProvider({
-      clientId: GOOGLE_CLIENT_ID as string,
-      clientSecret: GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
   callbacks: {
