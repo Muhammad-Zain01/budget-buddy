@@ -21,8 +21,10 @@ export default function TransactionPage() {
     (state) => state.setAddTransactionModal
   );
 
-  const transactions = data?.data?.transactions || [];
-  const pagination = data?.data?.pagination || {};
+  const transactionData = data?.data || {};
+
+  const transactions = transactionData?.transactions || [];
+  const pagination = transactionData?.pagination || {};
   const { currentPage, totalPages } = pagination;
 
   const onDelete = async (id: number) => {
@@ -38,7 +40,7 @@ export default function TransactionPage() {
   };
 
   const onEdit = (id: number) => {
-    const transaction = data?.data.find(
+    const transaction = transactions?.find(
       (transaction: Transaction) => transaction.id === id
     );
     if (transaction) {

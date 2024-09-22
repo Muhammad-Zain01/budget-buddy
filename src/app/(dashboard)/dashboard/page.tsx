@@ -38,7 +38,6 @@ export default function DashboardPage() {
       value: data?.data?.totalExpense || "",
     },
   ];
-  console.log(dashboardData);
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {isLoading ? (

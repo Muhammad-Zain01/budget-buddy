@@ -30,18 +30,7 @@ export default function AccountPage() {
     close();
   };
 
-  const accountData = useMemo(() => {
-    if (!data?.data) return [];
-
-    return data.data.sort((a, b) => {
-      // Sort by account type first
-      if (a.type !== b.type) {
-        return a.type.localeCompare(b.type);
-      }
-      // Then sort by balance (descending)
-      return Number(b.balance) - Number(a.balance);
-    });
-  }, [data]);
+  const accountData = data?.data || [];
 
   return (
     <div className="flex flex-col h-full">

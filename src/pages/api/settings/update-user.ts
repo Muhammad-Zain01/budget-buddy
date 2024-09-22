@@ -49,6 +49,8 @@ export default async function handler(
       user.updateUser(userId, { password: newHashedPassword });
     } else if (body?.currency) {
       user.updateUser(userId, { currency: body?.currency });
+    } else if (body.name) {
+      user.updateUser(userId, { name: body?.name });
     }
 
     res.status(200).json({ message: "User updated successfully" });

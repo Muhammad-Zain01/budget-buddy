@@ -8,16 +8,22 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { getFirstLetterOfName } from "@/lib/utils";
 import useCurrentUser from "@/hooks/api/useCurrentUser";
+import { useRouter } from "next/navigation";
 
 const User = () => {
+  const router = useRouter();
   const { data: userData } = useCurrentUser();
-  const { data } = useSession();
-  const user = data?.user;
-  const letter = getFirstLetterOfName(user?.name as string);
-  const profile = userData?.data?.profileImage || "/placeholder-user.jpg";
+  const letter = getFirstLetterOfName(userData?.data?.name as string);
+  const src = `https://ui-avatars.com/api/?name=${
+    userData?.data?.name || "-"
+  }&background=random`;
+
+  const profile =
+    userData?.data?.profileImage || src || "/placeholder-user.jpg";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,12 +33,21 @@ const User = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>{userData?.data?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            router.push("/settings");
+          }}
+        >
+          Settings
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
+        <DropdownMenuItem 
+          className="cursor-pointer" 
+          onClick={() => signOut()}
+        >
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

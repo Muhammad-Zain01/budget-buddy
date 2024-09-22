@@ -5,12 +5,10 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,18 +25,22 @@ import Loading from "../loader";
 import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/use-toast";
 import { user as userService } from "@/lib/services/user";
+import useCurrentUser from "@/hooks/api/useCurrentUser";
+
+
 const AccountSetting = () => {
-  const { data, status } = useSession();
-  const user = data?.user;
   const [loading, setLoading] = useState(false);
+
+  const { status } = useSession();
+  const { data } = useCurrentUser();
+
+  const user = data?.data;
 
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address"),
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z
-      .string()
-      .min(5, "New password must be at least 8 characters"),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,10 +61,22 @@ const AccountSetting = () => {
   }, [user, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (values.currentPassword == values.newPassword) {
+    if (
+      values.currentPassword &&
+      values.newPassword &&
+      values.currentPassword == values.newPassword
+    ) {
       return toast({
         title: "Error",
         description: "New password should be different than current Password",
+        variant: "destructive",
+      });
+    }
+
+    if (values.newPassword && values.newPassword.length < 5) {
+      return toast({
+        title: "Error",
+        description: "New password must be at least 5 characters long",
         variant: "destructive",
       });
     }
@@ -71,8 +85,12 @@ const AccountSetting = () => {
     try {
       await userService.updateUser({
         name: values.name,
-        currentPassword: values.currentPassword,
-        newPassword: values.newPassword,
+        ...(values.currentPassword && values.newPassword
+          ? {
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword,
+            }
+          : {}),
       });
       toast({
         title: "Success",

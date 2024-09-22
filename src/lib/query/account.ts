@@ -62,6 +62,9 @@ const account = {
           },
         },
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
     
     const updatedAccounts = accountsWithUpdatedBalance.map((account) => {

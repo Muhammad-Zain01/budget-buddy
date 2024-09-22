@@ -34,7 +34,7 @@ const AccountCard = ({
         <div className="flex items-center justify-end w-[70px]">
           <div
             className={clsx(
-              "text-ellipsis overflow-hidden text-nowrap text-xs md:text-sm text-gray-600 dark:text-gray-100 font-[500]",
+              "text-ellipsis  text-xs md:text-sm text-gray-500 dark:text-gray-100 font-[500]",
               balance < 0 && "text-red-500"
             )}
           >
