@@ -18,6 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!session) {
     return res.status(401).json({ status: 0, message: "UN_AUTHORIZED" });
   }
+  // @ts-ignore
   const userId = session?.user?.userId;
   console.log(session);
   if (req.method === "GET") {

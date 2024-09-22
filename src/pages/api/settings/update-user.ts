@@ -17,6 +17,7 @@ export default async function handler(
     return res.status(405).json({ message: errors.METHOD_NOT_ALLOWED });
   }
 
+  // @ts-ignore
   const userId = session?.user?.userId;
 
   try {

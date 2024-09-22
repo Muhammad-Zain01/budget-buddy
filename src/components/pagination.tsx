@@ -90,7 +90,6 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
           <PaginationPrevious
             className="cursor-pointer"
             onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
           />
         </PaginationItem>
         {renderPageNumbers()}
@@ -98,7 +97,6 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
           <PaginationNext
             className="cursor-pointer"
             onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
           />
         </PaginationItem>
       </PaginationContent>

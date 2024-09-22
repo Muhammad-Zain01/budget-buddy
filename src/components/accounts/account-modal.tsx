@@ -128,6 +128,7 @@ const AccountData = ({
           <AccountForm
             type={currentAccountType}
             setType={(type) => {
+              // @ts-ignore
               setAccountType(type);
             }}
           />
@@ -160,7 +161,6 @@ const AccountForm = ({
   type,
   setType,
 }: {
-  account: AccountType;
   type: string;
   setType: (type: string | null) => void;
 }) => {

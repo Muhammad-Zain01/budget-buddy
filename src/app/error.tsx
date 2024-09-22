@@ -23,7 +23,7 @@ export default function Error({
       </div>
       <h2 className="text-2xl font-bold mb-4">Oops! Something went wrong</h2>
       <p className="text-muted-foreground mb-6">
-        We're sorry for the inconvenience. Please try again.
+        We&apos;re sorry for the inconvenience. Please try again.
       </p>
       <Button onClick={() => reset()} variant="default">
         Try again

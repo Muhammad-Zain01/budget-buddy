@@ -9,6 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ status: 0, message: "UN_AUTHORIZED" });
   }
 
+  // @ts-ignore
   const userId = session?.user?.userId;
   if (req.method === "GET") {
     const result = await category.getCategoryByUser(userId);

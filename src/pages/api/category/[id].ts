@@ -12,13 +12,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "DELETE" && id) {
-    const result = category.remove(Number(id));
+    const result = await category.remove(Number(id));
     if (result) {
       return res.status(200).json({ status: 1 });
     }
     res.status(500).json({ status: 0 });
   } else if (req.method === "PUT" && id) {
-    const result = category.update(data, Number(id));
+    const result = await category.update(data, Number(id));
     console.log(result);
     if (result) {
       return res.status(200).json({ status: 1 });

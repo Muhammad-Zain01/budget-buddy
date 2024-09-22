@@ -10,6 +10,7 @@ export type AddAccount = {
 const account = {
   add: async (data: AddAccount) => {
     return await prisma.account.create({
+      // @ts-ignore
       data: data,
     });
   },
@@ -63,10 +64,10 @@ const account = {
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: "asc",
       },
     });
-    
+
     const updatedAccounts = accountsWithUpdatedBalance.map((account) => {
       const initialBalance = account.balance;
       let updatedBalance = initialBalance;

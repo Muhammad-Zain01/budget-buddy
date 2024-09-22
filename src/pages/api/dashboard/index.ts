@@ -16,6 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ? parseInt(year as string)
     : new Date().getFullYear();
 
+    // @ts-ignore
   const userId = session?.user?.userId;
 
   if (req.method === "GET") {

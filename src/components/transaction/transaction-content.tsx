@@ -51,7 +51,10 @@ const TransactionContent: React.FC<{
         return <TransactionTransfer form={form} />;
       case "people":
         return (
-          <TransactionPeople form={form} defaultTabValue={data?.subType} />
+          <TransactionPeople
+            form={form}
+            defaultTabValue={data?.subType || ""}
+          />
         );
     }
   };
@@ -63,8 +66,8 @@ const TransactionContent: React.FC<{
 
   useEffect(() => {
     if (data) {
-      const accountId =
-        data?.type?.toLowerCase() == "income" ? data?.toId : data?.fromId;
+      // @ts-ignore
+      const accountId = data?.type?.toLowerCase() == "income" ? data?.toId : data?.fromId;
       form.setValue("type", data?.type?.toLowerCase());
       data?.amount && form.setValue("amount", String(data?.amount));
       data?.description && form.setValue("description", data?.description);
@@ -74,8 +77,11 @@ const TransactionContent: React.FC<{
           isValidJSON(data?.tags) ? JSON.parse(data?.tags) : []
         );
       accountId && form.setValue("account", String(accountId));
+      // @ts-ignore
       data?.categoryId && form.setValue("category", String(data?.categoryId));
+      // @ts-ignore
       data?.fromId && form.setValue("from", String(data?.fromId));
+      // @ts-ignore
       data?.toId && form.setValue("to", String(data?.toId));
       data?.subType && form.setValue("people_type", data?.subType);
     }

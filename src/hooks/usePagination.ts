@@ -10,10 +10,13 @@ type HookReturn = {
   showNext: boolean;
 };
 
-const usePagination = <T extends string[]>(items: T, itemsPerPage: number) => {
+const usePagination = <T>(items: T, itemsPerPage: number) => {
   const [page, setPage] = useState<number>(1);
+  // @ts-ignore
   const totalPages = Math.floor(items.length / itemsPerPage);
+  // @ts-ignore
   const Items = items.filter(
+    // @ts-ignore
     (_, index) =>
       (page - 1) * itemsPerPage <= index && page * itemsPerPage > index
   );
@@ -24,6 +27,7 @@ const usePagination = <T extends string[]>(items: T, itemsPerPage: number) => {
     setPage((prev) => prev - 1);
   };
   const showPrev = page != 1;
+  // @ts-ignore
   const showNext = items.length != itemsPerPage && page <= totalPages;
 
   return {

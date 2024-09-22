@@ -18,5 +18,6 @@ export type Transaction = {
   subType?: SubType;
   createdAt?: string;
   date: string;
+  tags?: string;
   status: boolean;
 };

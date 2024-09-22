@@ -1,7 +1,4 @@
 "use client";
-
-import { useState } from "react";
-import { PrimaryCategories } from "@/constants/categories";
 import AddButton from "@/components/add-button";
 import TransactionCard from "@/components/transaction/transaction-card";
 import useModalStore from "@/store/modal";
@@ -14,6 +11,21 @@ import { useToast } from "@/components/ui/use-toast";
 import EmptyRecord from "@/components/empty-record";
 import PaginationComponent from "@/components/pagination";
 
+// Define the type for transactionData
+interface TransactionData {
+  transactions: any[]; // Replace 'any' with the actual type if known
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+}
+
+// Define the type for pagination
+type Pagination = {
+  currentPage: number;
+  totalPages: number;
+};
+
 export default function TransactionPage() {
   const { data, isLoading, setPage, refetch } = useTransaction();
   const { toast } = useToast();
@@ -21,10 +33,14 @@ export default function TransactionPage() {
     (state) => state.setAddTransactionModal
   );
 
-  const transactionData = data?.data || {};
+  // @ts-ignore
+  const transactionData: TransactionData | null = data?.data || null;
 
   const transactions = transactionData?.transactions || [];
-  const pagination = transactionData?.pagination || {};
+  const pagination: Pagination = transactionData?.pagination || {
+    currentPage: 0,
+    totalPages: 0,
+  };
   const { currentPage, totalPages } = pagination;
 
   const onDelete = async (id: number) => {

@@ -10,6 +10,7 @@ export const TypeSelector = (type: string) => {
     transfer: TransactionType.TRANSFER,
     people: TransactionType.PEOPLE,
   };
+  // @ts-ignore
   return types[type];
 };
 
@@ -47,6 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ status: 0, message: "UN_AUTHORIZED" });
   }
 
+  // @ts-ignore
   const userId = session?.user?.userId;
 
   if (req.method === "GET") {

@@ -11,14 +11,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "DELETE" && id) {
-    const result = account.remove(Number(id));
+    const result = await account.remove(Number(id));
     if (result) {
       return res.status(200).json({ status: 1 });
     }
     res.status(500).json({ status: 0 });
   } else if (req.method === "PUT" && id) {
     const data = req.body;
-    const result = account.update(data, Number(id));
+    const result = await account.update(data, Number(id));
     if (result) {
       return res.status(200).json({ status: 1 });
     }

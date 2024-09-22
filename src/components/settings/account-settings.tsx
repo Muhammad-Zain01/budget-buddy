@@ -101,7 +101,7 @@ const AccountSetting = () => {
       toast({
         title: "Error",
         description:
-          error?.message ||
+          (error as { message?: string })?.message ||
           "Failed to update account information. Please try again.",
         variant: "destructive",
       });

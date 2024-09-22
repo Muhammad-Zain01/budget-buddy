@@ -47,7 +47,7 @@ const transaction = {
     userId: number,
     selectedMonth: number | undefined,
     selectedYear: number | undefined,
-    page,
+    page: number,
     pageSize = 12
   ) => {
     const { startDate, endDate } = getMonthDateRange(

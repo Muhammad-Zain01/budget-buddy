@@ -2,7 +2,6 @@ import request from "../request";
 
 type TransactionInput = {
   balance: string;
-  date: string;
   tags?: string[] | null;
   description: string;
   category?: number;

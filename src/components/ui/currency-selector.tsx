@@ -5,7 +5,7 @@ import currencies from "@/constants/currencies";
 
 interface Currency {
   code: string;
-  name: string;
+  label: string;
   symbol: string;
 }
 
@@ -34,7 +34,7 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({
     if (onChange) onChange(currency.symbol);
   };
 
-  const filteredCurrencies = currencies.filter(
+  const filteredCurrencies: Currency[] = currencies.filter(
     (currency) =>
       currency.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
       currency.code.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,7 +70,7 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({
             </div>
           </div>
           <ul className="max-h-60 overflow-auto">
-            {filteredCurrencies.map((currency) => (
+            {filteredCurrencies.map((currency: Currency) => (
               <li
                 key={currency.code}
                 onClick={() => handleSelect(currency)}
@@ -88,7 +88,9 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <span className="mr-2 text-xs md:text-sm">{currency.symbol}</span>
+                  <span className="mr-2 text-xs md:text-sm">
+                    {currency.symbol}
+                  </span>
                 </div>
               </li>
             ))}
