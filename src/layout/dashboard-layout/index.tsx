@@ -9,7 +9,7 @@ type LayoutProps = {
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Providers>
+    <>
       <div className="flex min-h-screen bg-background">
         <Sidebar />
         <div className="flex flex-1 flex-col">
@@ -18,7 +18,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
       <AlertModal />
-    </Providers>
+    </>
   );
 };
 export default DashboardLayout;

@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 
 type ComponentProps = {
   item: DashboardItemType;
+  onCloseDrawer: () => void;
 };
 
 const SidbarItem: React.FC<ComponentProps> = ({
   item: { title, Icon, key },
+  onCloseDrawer,
 }) => {
   const path = usePathname();
 
@@ -21,6 +23,7 @@ const SidbarItem: React.FC<ComponentProps> = ({
         path?.includes(key) && "bg-gray-100 dark:bg-neutral-700"
       )}
       prefetch={false}
+      onClick={onCloseDrawer}
     >
       <div className="flex gap-3 items-center">
         {Icon}

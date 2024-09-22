@@ -17,19 +17,18 @@ const User = () => {
   const router = useRouter();
   const { data: userData } = useCurrentUser();
   const letter = getFirstLetterOfName(userData?.data?.name as string);
+
   const src = `https://ui-avatars.com/api/?name=${
     userData?.data?.name || "-"
   }&background=random`;
 
-  const profile =
-    userData?.data?.profileImage || src || "/placeholder-user.jpg";
-
+  const profile = userData?.data?.profileImage || src;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-9 w-9 cursor-pointer">
           <AvatarImage src={profile} />
-          <AvatarFallback>{letter}</AvatarFallback>
+          {!profile && <AvatarFallback>{letter}</AvatarFallback>}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
@@ -44,10 +43,7 @@ const User = () => {
           Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          className="cursor-pointer" 
-          onClick={() => signOut()}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

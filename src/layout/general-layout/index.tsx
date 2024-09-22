@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/app/globals.css";
+import Providers from "../dashboard-layout/components/providers";
 
 const popins = Poppins({
   subsets: ["latin"],
@@ -19,7 +20,9 @@ type LayoutProps = {
 const GeneralLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={popins.className}>{children}</body>
+      <body className={popins.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 };

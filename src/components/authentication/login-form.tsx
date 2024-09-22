@@ -22,7 +22,7 @@ import { useState } from "react";
 
 const formSchema = z.object({
   username: z.string().min(3, {
-    message: "Password must be at least 3 characters.",
+    message: "Username must be at least 3 characters.",
   }),
   password: z.string().min(5, {
     message: "Password must be at least 5 characters.",
@@ -36,30 +36,31 @@ const LoginForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      password: "",
     },
   });
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmit = async (value: any) => {
+  const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
       const response = await signIn("credentials", {
         username: value.username,
         password: value.password,
         redirect: false,
-      } as { username: string; password: string; redirect: boolean });
+      });
 
       if (response?.ok) {
         toast({
-          title: "Account Login Successfully",
+          title: "Account Login Successful",
         });
         router.push("/dashboard");
       } else {
         toast({
           variant: "destructive",
           title:
-            errors?.[response?.error as keyof typeof errors] || "Log in Error",
+            errors?.[response?.error as keyof typeof errors] || "Login Error",
         });
       }
     } catch (error) {
@@ -74,12 +75,12 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <div className=" bg-white text-black dark:bg-gray-800 dark:text-white">
       <div className="mb-8">
         <h1 className="text-lg md:text-2xl font-semibold">
           Log in to your Account
         </h1>
-        <p className="text-xs md:text-sm text-neutral-500">
+        <p className="text-xs md:text-sm text-neutral-500 dark:text-gray-300">
           Welcome back! Select method to log in:
         </p>
       </div>
@@ -98,7 +99,7 @@ const LoginForm = () => {
                   <FormControl>
                     <Input
                       placeholder="Enter your Email or Username"
-                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -118,7 +119,7 @@ const LoginForm = () => {
                     <Input
                       type="password"
                       placeholder="Enter your password"
-                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -136,10 +137,10 @@ const LoginForm = () => {
           </Button>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t dark:border-gray-600" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-background px-2 text-muted-foreground dark:bg-gray-800 dark:text-gray-400">
                 Or continue with
               </span>
             </div>
@@ -148,8 +149,8 @@ const LoginForm = () => {
         </form>
       </Form>
 
-      <div className="text-center mt-5 text-sm text-neutral-500">
-        {"Don't"} have an account?{" "}
+      <div className="text-center mt-5 text-sm text-neutral-500 dark:text-gray-400">
+        Don&apos;t have an account?{" "}
         <Link href="/register" className="font-[400] text-primary">
           Create an account
         </Link>

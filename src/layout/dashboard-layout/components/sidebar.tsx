@@ -31,6 +31,7 @@ const SidebarWrapper = () => {
       window.removeEventListener("open-drawer", openDrawer);
     };
   }, []);
+
   if (isTablet) {
     return (
       <Sheet
@@ -40,7 +41,7 @@ const SidebarWrapper = () => {
         }}
       >
         <SheetContent side={"left"} className="flex w-64 p-0">
-          <Sidebar />
+          <Sidebar onClose={() => setOpen(false)} />
         </SheetContent>
       </Sheet>
     );
@@ -48,7 +49,7 @@ const SidebarWrapper = () => {
   return <Sidebar />;
 };
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }: { onClose?: () => void }) => {
   return (
     <aside className="inset-y-0  left-0 flex w-64 flex-col border-r bg-background transition-all duration-300 data-[collapsed=true]:w-16 data-[collapsed=true]:overflow-x-hidden">
       <div className="flex h-16 shrink-0 items-center justify-between px-4">
@@ -66,7 +67,13 @@ const Sidebar = () => {
       </div>
       <nav className="flex flex-1 flex-col overflow-y-auto px-4 space-y-2 py-6">
         {DashboardItems.map((item: DashboardItemType, index) => {
-          return <SidbarItem key={index} item={item} />;
+          return (
+            <SidbarItem
+              key={index}
+              item={item}
+              onCloseDrawer={() => onClose?.()}
+            />
+          );
         })}
       </nav>
     </aside>

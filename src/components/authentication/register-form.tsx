@@ -17,6 +17,7 @@ import useUser from "@/hooks/api/useUser";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import GoogleButton from "./google-button";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string(),
@@ -30,6 +31,7 @@ const formSchema = z.object({
 });
 
 const RegisterForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,51 +42,65 @@ const RegisterForm = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmit = async (value: any) => {
-    const data = {
-      name: value.name,
-      username: value.username,
-      email: value.email,
-      password: value.password,
-    };
+  const onSubmit = async (value: z.infer<typeof formSchema>) => {
+    try {
+      setIsLoading(true);
+      const data = {
+        name: value.name,
+        username: value.username,
+        email: value.email,
+        password: value.password,
+      };
 
-    const response = await createUser(data);
-    console.log("xx", response);
-    if (response?.status) {
+      const response = await createUser(data);
+      if (response?.status) {
+        toast({
+          title: "Account Created Successfully",
+        });
+        router.push("/login");
+      } else {
+        toast({
+          title: response?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
       toast({
-        title: "Account Created Successfully",
-      });
-      router.push("/login");
-    } else {
-      toast({
-        title: response?.message || "Something wrong",
         variant: "destructive",
+        title: "An unexpected error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="bg-white text-black dark:bg-gray-800 dark:text-white">
       <div className="mb-8">
         <h1 className="text-lg md:text-2xl font-semibold">Create an account</h1>
-        <p className="md:text-sm text-xs text-neutral-500">
-          Welcome back! please create account to continue:
+        <p className="text-xs md:text-sm text-neutral-500 dark:text-gray-300">
+          Welcome! Please create an account to continue:
         </p>
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-1">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="">Name</FormLabel>
+                  <FormLabel className="text-sm font-medium">Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your full name." {...field} />
+                    <Input
+                      placeholder="Enter your full name"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
@@ -93,11 +109,15 @@ const RegisterForm = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-sm font-medium">Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your username." {...field} />
+                    <Input
+                      placeholder="Enter your username"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
@@ -106,11 +126,15 @@ const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-sm font-medium">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email." {...field} />
+                    <Input
+                      placeholder="Enter your email"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
@@ -119,28 +143,33 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-sm font-medium">Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your password."
+                      placeholder="Enter your password"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit" className="w-full mt-5 h-10">
-            Register
+          <Button
+            type="submit"
+            className="w-full py-2 text-white bg-primary hover:bg-primary-dark transition duration-300"
+            disabled={isLoading}
+          >
+            {isLoading ? "Registering..." : "Register"}
           </Button>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t dark:border-gray-600" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-background px-2 text-muted-foreground dark:bg-gray-800 dark:text-gray-400">
                 Or continue with
               </span>
             </div>
@@ -148,8 +177,8 @@ const RegisterForm = () => {
           <GoogleButton label="Register with Google" />
         </form>
       </Form>
-      <div className="text-center mt-5 text-sm text-neutral-500">
-        {"Don't"} have an account?{" "}
+      <div className="text-center mt-5 text-sm text-neutral-500 dark:text-gray-400">
+        Already have an account?{" "}
         <Link href="/login" className="font-[400] text-primary">
           Login
         </Link>
