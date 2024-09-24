@@ -34,6 +34,14 @@ export default function CategoryPage() {
         description: "Category has been deleted successfully",
       });
       refetch();
+    } else {
+      toast({
+        title: "Category not Deleted",
+        variant: "destructive",
+        description:
+          response?.message ||
+          "Category could not be deleted. it may used in Transactions.",
+      });
     }
     close();
   };

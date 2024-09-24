@@ -118,7 +118,7 @@ export default function DashboardPage() {
   );
 }
 
-function BarchartChart({ data }) {
+function BarchartChart({ data }: any) {
   const { isMobile } = useResponsive();
 
   const barData = Object.keys(data).map((key) => ({

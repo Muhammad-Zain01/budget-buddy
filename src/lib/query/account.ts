@@ -8,6 +8,18 @@ export type AddAccount = {
 };
 
 const account = {
+  get: async (id: number) => {
+    return await prisma.account.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        fromTransactions: true,
+        toTransactions: true,
+      },
+    });
+  },
   add: async (data: AddAccount) => {
     return await prisma.account.create({
       // @ts-ignore

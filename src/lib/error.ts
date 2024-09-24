@@ -3,12 +3,14 @@ const errors = {
   UN_AUTHORIZED: "Unauthorized access",
   METHOD_NOT_ALLOWED: "Method not allowed",
   EMAIL_UPDATE_NOT_POSSIBLE: "Email update is not possible",
-  NEW_PASSWORD_SAME_AS_CURRENT: "New password is the same as the current password",
+  NEW_PASSWORD_SAME_AS_CURRENT:
+    "New password is the same as the current password",
   INCORRECT_PASSWORD: "Incorrect password",
   USER_ALREADY_EXISTS: "User already exists",
   INVALID_CREDENTIALS: "Invalid credentials",
   SERVER_ERROR: "Internal server error",
-  
+  DELETE_NOT_POSSBILE:
+    "Delete not possible. Account has associated transactions.",
 };
 
 export default errors;

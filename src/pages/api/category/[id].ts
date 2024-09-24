@@ -12,6 +12,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "DELETE" && id) {
+    const data = await category.get(Number(id));
+    if (data?.Transaction.length) {
+      return res.status(400).json({
+        status: 0,
+        message: "Cannot delete category with associated transactions",
+      });
+    }
     const result = await category.remove(Number(id));
     if (result) {
       return res.status(200).json({ status: 1 });
@@ -19,7 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ status: 0 });
   } else if (req.method === "PUT" && id) {
     const result = await category.update(data, Number(id));
-    console.log(result);
     if (result) {
       return res.status(200).json({ status: 1 });
     }

@@ -15,6 +15,17 @@ type CategoryData = {
 };
 
 const category = {
+  get: async (id: number) => {
+    return await prisma.category.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        categoryName: true,
+        categoryType: true,
+        Transaction: true,
+      },
+    });
+  },
   add: async (data: AddCategoryType) => {
     return await prisma.category.create({
       data,

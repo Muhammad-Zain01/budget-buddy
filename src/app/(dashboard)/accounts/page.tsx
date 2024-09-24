@@ -10,7 +10,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Account } from "@/lib/services/account";
 import useAlertDialoag from "@/hooks/useAlertDialog";
 import EmptyRecord from "@/components/empty-record";
-import { useMemo } from "react";
 
 export default function AccountPage() {
   const { data, isLoading, refetch } = useAccount();
@@ -26,6 +25,14 @@ export default function AccountPage() {
         description: "Account has been deleted successfully",
       });
       refetch();
+    } else {
+      toast({
+        title: "Account Not Deleted",
+        variant: "destructive",
+        description:
+          response?.message ||
+          "Account could not be deleted. it may used in Transactions",
+      });
     }
     close();
   };

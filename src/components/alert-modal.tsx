@@ -23,8 +23,14 @@ export function AlertModal() {
 
   const handleAction = async () => {
     setLoading(true);
-    await action();
-    setLoading(false);
+    try {
+      await action();
+    } catch (error) {
+      console.log("Error during action:", error);
+      // You might want to show an error message to the user here
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (isMobile) {
@@ -57,7 +63,7 @@ export function AlertModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            Do you want to delete this category?
+            Do you want to delete this?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
