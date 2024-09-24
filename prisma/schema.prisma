@@ -4,24 +4,25 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url       = env("DATABASE_URL") 
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(100)
-  username     String        @db.VarChar(100)
-  email        String        @db.VarChar(100)
-  password     String        @db.VarChar(100)
-  isVerfied    Boolean       @default(false)
-  profileImage String?       @db.VarChar(100)
-  status       Boolean?      @default(true)
-  currency     String?       @default("₨") @db.VarChar(10)
-  createdAt    DateTime?     @default(now())
-  Category     Category[]
-  Account      Account[]
-  Transaction  Transaction[]
-  Goal         Goal[]
+  id               Int           @id @default(autoincrement())
+  name             String        @db.VarChar(100)
+  username         String        @db.VarChar(100)
+  email            String        @db.VarChar(100)
+  password         String        @db.VarChar(100)
+  isVerfied        Boolean       @default(false)
+  verificationCode String?       @db.VarChar(100)
+  profileImage     String?       @db.VarChar(100)
+  status           Boolean?      @default(true)
+  currency         String?       @default("₨") @db.VarChar(10)
+  createdAt        DateTime?     @default(now())
+  Category         Category[]
+  Account          Account[]
+  Transaction      Transaction[]
+  Goal             Goal[]
 }
 
 model Category {

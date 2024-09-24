@@ -65,3 +65,17 @@ export const getMonthDateRange = (
     endDate: formatDate(endDate),
   };
 };
+
+
+export const generateVerificationCode = (): string => {
+  const codeLength = 6;
+  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let code = '';
+
+  for (let i = 0; i < codeLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+
+  return code;
+};

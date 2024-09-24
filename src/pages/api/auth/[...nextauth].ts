@@ -37,7 +37,12 @@ export const authOptions: NextAuthOptions = {
         const hashedPassword = data?.password;
         const isUser = await VerifyPassword(password, hashedPassword);
         if (isUser) {
-          return { userId: data?.id, email: data?.email, name: data?.name };
+          return {
+            userId: data?.id,
+            email: data?.email,
+            name: data?.name,
+            isVerified: data.isVerfied,
+          };
         }
         throw new Error("WRONG_PASSWORD");
       },
