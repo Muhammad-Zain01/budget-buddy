@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChartTooltip, ChartContainer } from "@/components/ui/chart";
 import CurrencyView from "@/components/ui/currency-view";
 import useDashboard from "@/hooks/api/useDashboard";
+import useResponsive from "@/hooks/useResponsive";
 import { useState } from "react";
 import {
   CartesianGrid,
@@ -14,6 +15,8 @@ import {
   Bar,
   BarChart,
   YAxis,
+  ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
 export default function DashboardPage() {
@@ -92,6 +95,7 @@ export default function DashboardPage() {
                 }
               />
             </DashboardCard>
+
             <DashboardCard
               title={"Income vs Expenses"}
               description={`Your monthly income and expenses over time`}
@@ -114,47 +118,47 @@ export default function DashboardPage() {
   );
 }
 
-function BarchartChart({ data }: any) {
-  const barData =
-    Object.keys(data).map((key) => {
-      const item = data[key];
-      return {
-        category: key,
-        amount: item,
-      };
-    }) || [];
+function BarchartChart({ data }) {
+  const { isMobile } = useResponsive();
+
+  const barData = Object.keys(data).map((key) => ({
+    category: key,
+    amount: data[key],
+  }));
 
   return (
-    <div>
-      <ChartContainer
-        config={{
-          desktop: {
-            label: "Desktop",
-            color: "hsl(var(--chart-1))",
-          },
-        }}
-        className="min-h-[300px]"
-      >
-        <BarChart accessibilityLayer data={barData}>
-          <CartesianGrid vertical={false} />
+    <div className="w-full h-[300px] md:h-[400px] lg:h-[400px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={barData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+        >
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="category"
             tickLine={false}
-            tickMargin={10}
             axisLine={false}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            interval={0}
+            angle={-45}
+            textAnchor="end"
+            height={60}
           />
-          <ChartTooltip
-            cursor={false}
+          <YAxis
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            tickFormatter={(value) => `$${value}`}
+          />
+          <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="bg-white p-4 rounded-md shadow-lg">
-                    <p className="text-xs font-semibold text-gray-800 mb-2">
+                  <div className="bg-white p-2 sm:p-4 rounded-md shadow-lg text-xs sm:text-sm">
+                    <p className="font-semibold text-gray-800 mb-1 sm:mb-2">
                       {payload[0].payload.category}
                     </p>
                     <div className="flex items-center justify-between">
                       <CurrencyView className="text-gray-500" />
-                      <span className=" font-medium text-gray-700">
+                      <span className="font-medium text-gray-700">
                         {typeof payload[0].value === "number"
                           ? payload[0].value.toFixed(2)
                           : payload[0].value}
@@ -166,9 +170,13 @@ function BarchartChart({ data }: any) {
               return null;
             }}
           />
-          <Bar dataKey="amount" fill="hsl(var(--primary))" radius={8} />
+          <Bar
+            dataKey="amount"
+            fill="hsl(var(--primary))"
+            radius={[8, 8, 0, 0]}
+          />
         </BarChart>
-      </ChartContainer>
+      </ResponsiveContainer>
     </div>
   );
 }
@@ -188,7 +196,7 @@ function LinechartChart({ data }: any) {
   const formattedData = formatChartData(data);
 
   return (
-    <div>
+    <div className="w-full ">
       <ChartContainer
         config={{
           income: {
@@ -201,32 +209,34 @@ function LinechartChart({ data }: any) {
           },
         }}
       >
-        <LineChart
-          data={formattedData}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <ChartTooltip />
-          <Line
-            type="monotone"
-            dataKey="income"
-            stroke="hsl(var(--chart-1))"
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            type="monotone"
-            dataKey="expense"
-            stroke="hsl(var(--chart-2))"
-            activeDot={{ r: 8 }}
-          />
-        </LineChart>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={formattedData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <ChartTooltip />
+            <Line
+              type="monotone"
+              dataKey="income"
+              stroke="hsl(var(--chart-1))"
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="expense"
+              stroke="hsl(var(--chart-2))"
+              activeDot={{ r: 8 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </ChartContainer>
     </div>
   );

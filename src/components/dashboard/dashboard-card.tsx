@@ -26,12 +26,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   return (
     <Card className={className}>
       <CardHeader>
-        <div className="flex w-full  justify-between">
+        <div className="flex w-full flex-col md:flex-row  justify-between">
           <div>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
           </div>
-          {additionalHeader && additionalHeader}
+          <div className="mt-2 md:mt-0 justify-end flex md:block">
+            {additionalHeader && additionalHeader}
+          </div>
         </div>
       </CardHeader>
       <CardContent>{children}</CardContent>
