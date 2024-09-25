@@ -5,7 +5,6 @@ import {
   Body,
   Container,
   Section,
-  Img,
   Text,
   Hr,
   Preview,

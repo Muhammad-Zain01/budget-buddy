@@ -41,6 +41,16 @@ export default function DashboardPage() {
       value: data?.data?.totalExpense || "",
     },
   ];
+
+  const LineChartData =
+    {
+      expense: dashboardData?.expenseByDate || {},
+      income: dashboardData?.incomeByDate || {},
+    } || {};
+
+  const BarChartData = isExpense
+    ? dashboardData?.spendingBreakdown || {}
+    : dashboardData?.incomeBreakdown || {};
   return (
     <div className="flex flex-col min-h-[85vh] bg-background">
       {isLoading ? (
@@ -87,13 +97,7 @@ export default function DashboardPage() {
                 </div>
               }
             >
-              <BarchartChart
-                data={
-                  isExpense
-                    ? dashboardData?.spendingBreakdown || {}
-                    : dashboardData?.incomeBreakdown || {}
-                }
-              />
+              <BarchartChart data={BarChartData} />
             </DashboardCard>
 
             <DashboardCard
@@ -101,15 +105,7 @@ export default function DashboardPage() {
               description={`Your monthly income and expenses over time`}
               className="w-full lg:w-1/2"
             >
-              <LinechartChart
-                data={
-                  {
-                    expense: dashboardData?.expenseByDate || {},
-                    income: dashboardData?.incomeByDate || {},
-                  } || {}
-                }
-                className="aspect-[4/3]"
-              />
+              <LinechartChart data={LineChartData} className="aspect-[4/3]" />
             </DashboardCard>
           </div>
         </main>
