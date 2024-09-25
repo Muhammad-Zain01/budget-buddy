@@ -42,11 +42,10 @@ export default function DashboardPage() {
     },
   ];
 
-  const LineChartData =
-    {
-      expense: dashboardData?.expenseByDate || {},
-      income: dashboardData?.incomeByDate || {},
-    } || {};
+  const LineChartData = {
+    expense: dashboardData?.expenseByDate ?? {},
+    income: dashboardData?.incomeByDate ?? {},
+  };
 
   const BarChartData = isExpense
     ? dashboardData?.spendingBreakdown || {}
