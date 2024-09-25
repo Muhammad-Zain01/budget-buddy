@@ -28,7 +28,7 @@ const User = () => {
       <DropdownMenuTrigger asChild>
         <Avatar className="h-9 w-9 cursor-pointer">
           <AvatarImage src={profile} />
-          {!profile && <AvatarFallback>{letter}</AvatarFallback>}
+          <AvatarFallback>{letter}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

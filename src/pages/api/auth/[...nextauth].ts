@@ -69,14 +69,13 @@ export const authOptions: NextAuthOptions = {
           }
           if (existingUser) {
             // @ts-ignore
-            let extendedUserData: ExtendedAdapterUser = { ...existingUser };
-            // @ts-ignore
-            extendedUserData.userId = existingUser.id;
+            (userData as ExtendedAdapterUser).userId = existingUser.id;
             return true;
           }
         }
       }
-      return true;
+      // For non-Google sign-ins or if there's no email
+      return !!userData;
     },
     async jwt({ token, user }) {
       if (user) {
