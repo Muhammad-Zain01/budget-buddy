@@ -17,14 +17,14 @@ Users can create personalized categories to tailor their budget tracking, set up
 Designed for simplicity and efficiency, Budget Buddy easily tracks, analyzes, and optimizes your financial health.
 
   </p>
-    <a href="https://budget-buddy-omega.vercel.app"><strong>View Demo »</strong></a>
+    <a href="https://budget-buddy-v1.vercel.app/"><strong>View Demo »</strong></a>
     <br />
 <br />
 
 </div>
 
-[![Preview][product-screenshot]](https://budget-buddy-omega.vercel.app)
-[![Preview][product-screenshot2]](https://budget-buddy-omega.vercel.app)
+[![Preview][product-screenshot]](https://budget-buddy-v1.vercel.app/)
+[![Preview][product-screenshot2]](https://budget-buddy-v1.vercel.app/)
 
 ### Built With
 
