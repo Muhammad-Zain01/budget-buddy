@@ -37,6 +37,14 @@ const User = () => {
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {
+            router.push("/dashboard");
+          }}
+        >
+          Dashboard
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
             router.push("/settings");
           }}
         >

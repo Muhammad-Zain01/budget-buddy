@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, ShieldCheck } from "lucide-react";
+import { Loader2, RefreshCcw, ShieldCheck } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { user as apiUser } from "@/lib/services/user";
 import useCurrentUser from "@/hooks/api/useCurrentUser";
@@ -9,10 +9,22 @@ import useCurrentUser from "@/hooks/api/useCurrentUser";
 const VerificationPage = () => {
   const { refetch } = useCurrentUser();
   const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [loading, setLoading] = useState<{
+    verification: boolean;
+    resend: boolean;
+  }>({
+    verification: false,
+    resend: false,
+  });
   const { toast } = useToast();
-  const inputRefs = useRef<(HTMLInputElement | null)[]>(
-    Array.from({ length: 6 }, () => null)
-  );
+  const inputRefs = useRef<React.RefObject<HTMLInputElement>[]>([
+    useRef<HTMLInputElement>(null), // Create 6 refs
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+  ]);
 
   const handleChange = (index: number, value: string) => {
     const newCode = [...code];
@@ -33,22 +45,36 @@ const VerificationPage = () => {
   };
 
   const handleResend = async () => {
-    toast({
-      title: "Resending Code",
-      description: "Please wait while we resend the verification code...",
-    });
+    try {
+      toast({
+        title: "Resending Code",
+        description: "Please wait while we resend the verification code...",
+      });
 
-    const response = await apiUser.resendEmail();
-    console.log(response);
+      setLoading((prev) => ({ ...prev, resend: true }));
+      await apiUser.resendEmail();
 
-    toast({
-      title: "Code Resent",
-      description: "A new verification code has been sent to your email.",
-      variant: "default",
-    });
-    setCode(["", "", "", "", "", ""]);
-    // @ts-ignore
-    inputRefs.current[0].current.focus();
+      setCode(["", "", "", "", "", ""]);
+      // @ts-ignore
+      inputRefs.current[0].current.focus();
+
+      toast({
+        title: "Code Resent",
+        description: "A new verification code has been sent to your email.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Resend Failed",
+        description:
+          // @ts-ignore
+          error.message ||
+          "An error occurred while resending the verification code.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading({ resend: false, verification: false });
+    }
   };
 
   const handleVerify = async () => {
@@ -67,6 +93,7 @@ const VerificationPage = () => {
         title: "Verifying",
         description: "Please wait while we verify your code...",
       });
+      setLoading((prev) => ({ ...prev, verification: true }));
       await apiUser.verifyUser({ code: verificationCode });
       toast({
         title: "Verification Successful",
@@ -75,13 +102,14 @@ const VerificationPage = () => {
       });
       refetch();
     } catch (error) {
-      console.error("Verification error:", error);
       toast({
         title: "Verification Failed",
         // @ts-ignore
         description: error?.message || "An error occurred during verification.",
         variant: "destructive",
       });
+    } finally {
+      setLoading({ resend: false, verification: false });
     }
   };
 
@@ -115,15 +143,27 @@ const VerificationPage = () => {
         <Button
           onClick={handleResend}
           variant="outline"
+          disabled={loading.resend}
           className="text-sm flex gap-2 w-1/2 items-center "
         >
-          <RefreshCcw size={16} /> Resend Code
+          {loading.resend ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCcw size={16} />
+          )}
+          Resend Code
         </Button>
         <Button
           onClick={handleVerify}
-          className="text-sm flex gap-2 w-1/2 items-center   "
+          disabled={loading.verification}
+          className="text-sm flex gap-2 w-1/2 items-center"
         >
-          <ShieldCheck size={16} /> Verify
+          {loading.verification ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <ShieldCheck size={16} />
+          )}
+          Verify
         </Button>
       </div>
     </div>

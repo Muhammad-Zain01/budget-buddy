@@ -1,192 +1,77 @@
+import React from "react";
 import {
+  Html,
+  Head,
   Body,
   Container,
-  Head,
-  Heading,
-  Html,
+  Section,
   Img,
-  Link,
-  Preview,
   Text,
-  Font,
+  Hr,
+  Preview,
+  Link,
 } from "@react-email/components";
-import * as React from "react";
+import { Tailwind } from "@react-email/tailwind";
 
-interface BudgetBuddyVerificationEmailProps {
-  verificationCode?: string;
-}
-
-export const BudgetBuddyVerificationEmail = ({
-  verificationCode,
-}: BudgetBuddyVerificationEmailProps) => (
-  <Html>
-    <Head>
-      <Font
-        fontFamily="Poppins"
-        fallbackFontFamily="Helvetica"
-        webFont={{
-          url: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2",
-          format: "woff2",
-        }}
-        fontWeight={400}
-        fontStyle="normal"
-      />
-    </Head>
-    <Preview>Verify your email address</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        {/* eslint-disable-next-line */}
-        <img
-          src={`https://budget-buddy-v1.vercel.app/logo.png`}
-          width="64"
-          height="64"
-          alt="Budget Buddy's Logo"
-          style={logo}
-        />
-
-        <Heading style={h1}>Email Verification</Heading>
-        <Text style={text}>
-          Thank you for signing up for Budget Buddy! Please verify your email
-          address by using the code below:
-        </Text>
-        <Container style={codeContainer}>
-          <Text style={bigCode}>{verificationCode}</Text>
-        </Container>
-        <Text style={disclaimer}>
-          If you did not sign up for Budget Buddy, please ignore this email.
-        </Text>
-
-        <Container style={footerContainer}>
-          <Text style={footer}>
-            Developed by{" "}
-            <Link
-              href="https://www.muhammad-zain.com"
-              target="_blank"
-              style={link}
-            >
-              Muhammad Zain
-            </Link>
-          </Text>
-          <Container style={socialLinks}>
-            <Link
-              href="https://github.com/Muhammad-Zain01"
-              target="_blank"
-              style={iconLink}
-            >
-              <Img
-                src="https://budget-buddy-v1.vercel.app/github.png"
-                width="20"
-                height="20"
-                alt="GitHub"
-              />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/muhammad-zain01/"
-              target="_blank"
-              style={iconLink}
-            >
-              <Img
-                src="https://budget-buddy-v1.vercel.app/linkedin.png"
-                width="20"
-                height="20"
-                alt="LinkedIn"
-              />
-            </Link>
+const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
+  return (
+    <Html>
+      <Head />
+      <Preview>Verify your email address</Preview>
+      <Tailwind>
+        <Body className="bg-gray-100 font-sans">
+          <Container className="mx-auto p-4 max-w-xl">
+            <Section className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="mt-8 text-center">
+                {/* eslint-disable-next-line */}
+                <img
+                  src="https://budget-buddy-v1.vercel.app/logo.png"
+                  alt="Budget Buddy"
+                  className="w-20 mx-auto mb-4"
+                />
+              </div>
+              <Section className="p-8">
+                <Text className="text-xl font-bold text-gray-800 mb-4">
+                  Hello {name},
+                </Text>
+                <Text className="text-gray-600 mb-6">
+                  Thank you for signing up! To ensure the security of your
+                  account and verify your email address, please use the
+                  verification code below:
+                </Text>
+                <div className="bg-gray-100 border-2 border-blue-300 rounded-lg p-6 mb-6">
+                  <Text className="text-5xl font-bold text-center text-blue-600">
+                    {verificationCode}
+                  </Text>
+                </div>
+                <Text className="text-gray-600 mb-6">
+                  If you didn&apos;t request this verification, please ignore
+                  this email.
+                </Text>
+                <Text className="text-gray-600 mb-6">
+                  If you have any questions, please don&apos;t hesitate to
+                  contact our support team.
+                </Text>
+                <Hr className="border-gray-200 my-6" />
+                <Container className="flex items-center justify-center ">
+                  <Text className="text-sm text-gray-600 text-center mb-4">
+                    Developed by{" "}
+                    <Link
+                      href="https://www.muhammad-zain.com"
+                      target="_blank"
+                      className="font-bold text-gray-600 underline"
+                    >
+                      Muhammad Zain
+                    </Link>
+                  </Text>
+                </Container>
+              </Section>
+            </Section>
           </Container>
-        </Container>
-      </Container>
-    </Body>
-  </Html>
-);
-
-BudgetBuddyVerificationEmail.PreviewProps = {
-  verificationCode: "123456",
-} as BudgetBuddyVerificationEmailProps;
-
-export default BudgetBuddyVerificationEmail;
-
-const main = {
-  backgroundColor: "#ffffff",
-  fontFamily: "Poppins, Helvetica, Arial, sans-serif",
+        </Body>
+      </Tailwind>
+    </Html>
+  );
 };
 
-const container = {
-  margin: "0 auto",
-  padding: "40px 20px",
-  width: "100%",
-  maxWidth: "560px",
-};
-
-const logo = {
-  margin: "0 auto 32px",
-  display: "block",
-};
-
-const h1 = {
-  color: "#333",
-  fontSize: "28px",
-  fontWeight: "bold",
-  textAlign: "center" as const,
-  margin: "0 0 24px",
-  padding: "0",
-};
-
-const text = {
-  color: "#555",
-  fontSize: "16px",
-  lineHeight: "26px",
-  textAlign: "center" as const,
-};
-
-const bigCode = {
-  color: "#000",
-  fontSize: "56px",
-  fontWeight: "900",
-  letterSpacing: "5px",
-  lineHeight: "1",
-  textAlign: "center" as const,
-};
-
-const codeContainer = {
-  margin: "20px 0",
-  padding: "5px",
-};
-
-const disclaimer = {
-  color: "#777",
-  fontSize: "14px",
-  lineHeight: "24px",
-  marginTop: "32px",
-  textAlign: "center" as const,
-};
-
-const footerContainer = {
-  borderTop: "1px solid #eee",
-  marginTop: "32px",
-  paddingTop: "32px",
-};
-
-const footer = {
-  color: "#666",
-  fontSize: "14px",
-  lineHeight: "24px",
-  textAlign: "center" as const,
-};
-
-const link = {
-  color: "#000",
-  textDecoration: "none",
-  fontWeight: "bold",
-};
-
-const socialLinks = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: "16px",
-};
-
-const iconLink = {
-  display: "inline-block",
-  margin: "0 8px",
-};
+export default VerificationEmail;

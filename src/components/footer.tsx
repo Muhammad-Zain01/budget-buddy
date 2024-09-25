@@ -1,4 +1,8 @@
-import { GitHubLogoIcon, LinkedInLogoIcon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
+import {
+  GitHubLogoIcon,
+  LinkedInLogoIcon,
+  EnvelopeClosedIcon,
+} from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export const GITHUB_URL = "https://github.com/Muhammad-Zain01";

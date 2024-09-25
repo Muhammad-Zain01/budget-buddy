@@ -44,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const user = await dbUser.create(userData);
-  await sendVerificationEmail(email, code);
+  await sendVerificationEmail(email, code, user.name);
 
   if (user) {
     return res

@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const newVerificationCode = generateVerificationCode();
 
     await dbUser.updateCode(userId, newVerificationCode);
-    await sendVerificationEmail(user.email, newVerificationCode);
+    await sendVerificationEmail(user.email, newVerificationCode, user.name);
 
     return res.status(200).json({
       status: 1,

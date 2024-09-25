@@ -1,32 +1,28 @@
 import { render } from "@react-email/components";
-import nodemailer from "nodemailer";
 import Verification from "@/email/verification";
+import { Resend } from "resend";
 
-const sendEmail = async (to: string, subject: string, html: string) => {
-  let transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const emailOptions = {
-    from: process.env.EMAIL_USER,
+const sendEmail = async (to: string, subject: string, react: any) => {
+  return await resend.emails.send({
+    from: `${process.env.EMAIL_TITLE} <${process.env.EMAIL_USER}>`,
     to: to,
     subject: subject,
-    html: html,
-  };
-  return await transporter.sendMail(emailOptions);
+    react: react,
+  });
 };
 
-export const sendVerificationEmail = async (to: string, code: string) => {
+export const sendVerificationEmail = async (
+  to: string,
+  code: string,
+  name: string
+) => {
   const subject = "Email Verification";
-  const html = await render(<Verification verificationCode={code} />);
+  const html = <Verification verificationCode={code} name={name} />;
   const response = await sendEmail(to, subject, html);
   console.log(response);
+  return response;
 };
 
 export default sendEmail;
