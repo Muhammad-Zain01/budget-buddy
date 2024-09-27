@@ -14,12 +14,12 @@ const CategoryTabs: React.FC<ComponentProps> = ({
 }) => {
   return (
     <Tabs>
-      <div className="flex items-center justify-between mb-4">
-        <TabsList>
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <TabsList className="flex-grow md:flex-initial">
           <TabsTrigger
             value="income"
             className={clsx(
-              "px-3 text-xs md:text-sm",
+              "px-3 text-xs md:text-sm flex-grow md:flex-initial",
               active === "income" && "bg-white  text-black"
             )}
             onClick={() => onChange("income")}
@@ -29,7 +29,7 @@ const CategoryTabs: React.FC<ComponentProps> = ({
           <TabsTrigger
             value="expense"
             className={clsx(
-              "px-3 text-xs md:text-sm",
+              "px-3 text-xs md:text-sm flex-grow md:flex-initial",
               active === "expense" && "bg-white text-black "
             )}
             onClick={() => onChange("expense")}
@@ -37,7 +37,7 @@ const CategoryTabs: React.FC<ComponentProps> = ({
             Expense
           </TabsTrigger>
         </TabsList>
-        <AddButton label="Add Category" onClick={() => addModal(true)} />
+        <AddButton label="Add Category" onClick={() => addModal(true)} className="sm:w-auto" />
       </div>
     </Tabs>
   );

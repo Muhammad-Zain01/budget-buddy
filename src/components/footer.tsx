@@ -14,8 +14,8 @@ const Footer = () => {
   return (
     <footer className="bg-background dark:bg-gray-800 border-t py-4">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center gap-3 md:text-sm text-xs text-muted-foreground dark:text-gray-300">
-          <p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-xs sm:text-sm text-muted-foreground dark:text-gray-300">
+          <p className="text-center text-[12px] sm:text-left mb-2 sm:mb-0">
             Developed by{" "}
             <a
               href={WEBSITE}
@@ -25,14 +25,14 @@ const Footer = () => {
             </a>
             . All rights reserved.
           </p>
-          <div className="flex space-x-4">
+          <div className="flex  space-x-5 md:space-x-3">
             <Link
               href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
             >
-              <LinkedInLogoIcon />
+              <LinkedInLogoIcon className="w-5 h-5 " />
             </Link>
             <Link
               href={GITHUB_URL}
@@ -40,7 +40,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
             >
-              <GitHubLogoIcon />
+              <GitHubLogoIcon className="w-5 h-5 " />
             </Link>
             <Link
               href={`mailto:${EMAIL}`}
@@ -48,7 +48,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
             >
-              <EnvelopeClosedIcon />
+              <EnvelopeClosedIcon className="w-5 h-5 " />
             </Link>
           </div>
         </div>
