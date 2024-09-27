@@ -1,15 +1,15 @@
 import { render } from "@react-email/components";
+import Plunk from "@plunk/node";
 import Verification from "@/email/verification";
-import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// @ts-ignore
+const plunk = new Plunk(process.env.EMAIL_API_KEY);
 
 const sendEmail = async (to: string, subject: string, html: any) => {
-  return await resend.emails.send({
-    from: `${process.env.EMAIL_TITLE} <${process.env.EMAIL_USER}>`,
+  return plunk.emails.send({
     to: to,
     subject: subject,
-    html: html,
+    body: html,
   });
 };
 
@@ -23,7 +23,7 @@ export const sendVerificationEmail = async (
     <Verification verificationCode={code} name={name} />
   );
   const response = await sendEmail(to, subject, html);
-  console.log(response);
+  console.log("Email Response ===>>", response);
   return response;
 };
 
