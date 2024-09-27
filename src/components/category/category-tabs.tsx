@@ -37,6 +37,7 @@ const CategoryTabs: React.FC<ComponentProps> = ({
             Expense
           </TabsTrigger>
         </TabsList>
+        {/* @ts-ignore */}
         <AddButton label="Add Category" onClick={() => addModal(true)} className="sm:w-auto" />
       </div>
     </Tabs>
