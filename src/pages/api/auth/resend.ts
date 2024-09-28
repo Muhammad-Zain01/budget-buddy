@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbUser from "@/lib/query/user";
 import { getUserSession } from "@/lib/auth";
 import { generateVerificationCode } from "@/lib/utils";
-import { sendVerificationEmail } from "@/lib/email";
+import email from "@/lib/email-api";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -33,7 +33,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const newVerificationCode = generateVerificationCode();
 
     await dbUser.updateCode(userId, newVerificationCode);
-    await sendVerificationEmail(user.email, newVerificationCode, user.name);
+    await email.send("verification", {
+      to: user.email,
+      name: user.name,
+      code: newVerificationCode,
+    });
 
     return res.status(200).json({
       status: 1,

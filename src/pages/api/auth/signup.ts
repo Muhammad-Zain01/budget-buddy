@@ -3,7 +3,7 @@ import { HashPassword } from "@/lib/auth";
 import prisma from "@/lib/db";
 import dbUser from "@/lib/query/user";
 import { generateVerificationCode } from "@/lib/utils";
-import { sendVerificationEmail } from "@/lib/email";
+import emailUtils from "@/lib/email-api";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const data = req.body;
@@ -44,7 +44,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const user = await dbUser.create(userData);
-  await sendVerificationEmail(email, code, user.name);
+  await emailUtils.send("verification", {
+    to: email,
+    name: user.name,
+    code: code,
+  });
 
   if (user) {
     return res

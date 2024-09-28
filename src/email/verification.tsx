@@ -52,8 +52,8 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
                   contact our support team.
                 </Text>
                 <Hr className="border-gray-200 my-6" />
-                <Container className="flex items-center justify-center ">
-                  <Text className="text-sm text-gray-600 text-center mb-4">
+                <Container className="text-center">
+                  <Text className="text-sm text-gray-600 mb-4 inline-block">
                     Developed by{" "}
                     <Link
                       href="https://www.muhammad-zain.com"
@@ -63,6 +63,34 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
                       Muhammad Zain
                     </Link>
                   </Text>
+                  <Link
+                    href="https://github.com/Muhammad-Zain01"
+                    target="_blank"
+                    className="hover:opacity-100 ml-2 opacity-80 transition-opacity"
+                  >
+                    {/* eslint-disable-next-line */}
+                    <img
+                      src="https://budget-buddy-v1.vercel.app/github.png"
+                      width="15 "
+                      height="15  "
+                      alt="GitHub"
+                      className="rounded-full"
+                    />
+                  </Link>
+                  <Link
+                    href="https://www.linkedin.com/in/muhammad-zain01/"
+                    target="_blank"
+                    className="hover:opacity-100 ml-1 opacity-70 transition-opacity"
+                  >
+                    {/* eslint-disable-next-line */}
+                    <img
+                      src="https://budget-buddy-v1.vercel.app/linkedin.png"
+                      width="15 "
+                      height="15  "
+                      alt="LinkedIn"
+                      className="rounded-full"
+                    />
+                  </Link>
                 </Container>
               </Section>
             </Section>
