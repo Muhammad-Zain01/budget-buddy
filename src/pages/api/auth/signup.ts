@@ -44,13 +44,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   const user = await dbUser.create(userData);
+
   await emailUtils.send("verification", {
     to: email,
     name: user.name,
     code: code,
   });
 
-  await email.send("welcome", {
+  await emailUtils.send("welcome", {
     to: user.email,
     name: user.name,
   });
