@@ -3,7 +3,7 @@ import request from "./request";
 const sendEmail = async (to: string, subject: string, content: string) => {
   const URL = process.env.EMAIL_URL;
   const ACCOUNT = process.env.EMAIL_ACCOUNT;
-
+  console.log(URL, ACCOUNT)
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
