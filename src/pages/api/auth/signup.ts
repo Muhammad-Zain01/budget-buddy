@@ -51,10 +51,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     code: code,
   });
 
-  await emailUtils.send("welcome", {
-    to: user.email,
-    name: user.name,
-  });
+  // await emailUtils.send("welcome", {
+  //   to: user.email,
+  //   name: user.name,
+  // });
 
   if (user) {
     return res
