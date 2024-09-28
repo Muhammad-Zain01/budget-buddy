@@ -39,7 +39,10 @@ const Header = () => {
               >
                 Login
               </Button>
-              <Button className="bg-[#2863EB] hover:bg-[#1E4BB8] dark:bg-[#4D8EFF] dark:hover:bg-[#3A6CD9] transition-colors duration-300">
+              <Button
+                className="bg-[#2863EB] hover:bg-[#1E4BB8] dark:bg-[#4D8EFF] dark:hover:bg-[#3A6CD9] transition-colors duration-300"
+                onClick={() => router.push("/register")}
+              >
                 Sign Up
               </Button>
             </div>

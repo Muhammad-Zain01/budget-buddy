@@ -39,6 +39,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       code: newVerificationCode,
     });
 
+    await email.send("welcome", {
+      to: user.email,
+      name: user.name,
+    });
+
     return res.status(200).json({
       status: 1,
       message: "New verification code generated and sent successfully",

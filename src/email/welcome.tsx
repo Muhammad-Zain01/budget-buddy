@@ -9,18 +9,20 @@ import {
   Hr,
   Preview,
   Link,
+  Button,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
+
+const WelcomeEmail = ({ name = "User" }) => {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address</Preview>
+      <Preview>Welcome to Budget Buddy!</Preview>
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto p-4 max-w-xl">
-            <Section className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="mt-8 text-center">
+            <Section className="bg-white rounded-lg  shadow-lg overflow-hidden">
+              <div className="pt-8 text-center">
                 {/* eslint-disable-next-line */}
                 <img
                   src="https://budget-buddy-v1.vercel.app/logo.png"
@@ -30,28 +32,26 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
               </div>
               <Section className="p-8">
                 <Text className="text-xl font-bold text-gray-800 mb-4">
-                  Hello {name},
+                  Welcome, {name}!
                 </Text>
-                <Text className="text-gray-600 mb-6">
-                  Thank you for signing up! To ensure the security of your
-                  account and verify your email address, please use the
-                  verification code below:
+
+                <Text className="text-gray-600 mb-4 mt-4 leading-relaxed">
+                  Thank you for joining Budget Buddy! We are excited to have you
+                  on board. To get started, explore our features and manage your
+                  budget effectively. If you have any questions, feel free to
+                  reach out to our support team.
                 </Text>
-                <div className="bg-gray-100 border-2 border-blue-300 rounded-lg p-6 mb-6">
-                  <Text className="text-5xl font-bold text-center text-blue-600">
-                    {verificationCode}
-                  </Text>
-                </div>
-                <Text className="text-gray-600 mb-6">
-                  If you didn&apos;t request this verification, please ignore
-                  this email.
-                </Text>
-                <Text className="text-gray-600 mb-6">
-                  If you have any questions, please don&apos;t hesitate to
-                  contact our support team.
-                </Text>
+
+                <Section className="text-center my-7">
+                  <Button
+                    href="https://budget-buddy-v1.vercel.app/dashboard"
+                    className="bg-blue-600 text-sm text-white font-bold py-3 px-5 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Go to Dashboard
+                  </Button>
+                </Section>
                 <Hr className="border-gray-200 my-6" />
-                <Container className="text-center">
+                <Container className="text-center ">
                   <Text className="text-xs text-gray-600 mb-4 ">
                     Developed by{" "}
                     <Link
@@ -62,6 +62,7 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
                       Muhammad Zain
                     </Link>
                   </Text>
+                  {/* Social Links */}
                   <Link
                     href="https://github.com/Muhammad-Zain01"
                     target="_blank"
@@ -70,8 +71,8 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
                     {/* eslint-disable-next-line */}
                     <img
                       src="https://budget-buddy-v1.vercel.app/github.png"
-                      width="15 "
-                      height="15  "
+                      width="15"
+                      height="15"
                       alt="GitHub"
                       className="rounded-full"
                     />
@@ -84,8 +85,8 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
                     {/* eslint-disable-next-line */}
                     <img
                       src="https://budget-buddy-v1.vercel.app/linkedin.png"
-                      width="15 "
-                      height="15  "
+                      width="15"
+                      height="15"
                       alt="LinkedIn"
                       className="rounded-full"
                     />
@@ -99,5 +100,4 @@ const VerificationEmail = ({ name = "User", verificationCode = "000000" }) => {
     </Html>
   );
 };
-
-export default VerificationEmail;
+export default WelcomeEmail;

@@ -3,13 +3,13 @@ import request from "./request";
 const sendEmail = async (to: string, subject: string, content: string) => {
   const URL = process.env.EMAIL_URL;
   const ACCOUNT = process.env.EMAIL_ACCOUNT;
-  console.log(URL, ACCOUNT)
+
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
     to: to,
-    subject: subject,
+    subject: Buffer.from(subject).toString("base64"),
     htmlBody: Buffer.from(content).toString("base64"),
     selectedAccount: ACCOUNT,
   });

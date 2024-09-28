@@ -1,8 +1,9 @@
 import { render } from "@react-email/components";
 import sendEmail from "./email";
 import Verification from "@/email/verification";
+import WelcomeEmail from "@/email/welcome";
 
-type EmailType = "verification";
+type EmailType = "verification" | "welcome";
 
 type EmailParams = {
   to: string;
@@ -15,20 +16,24 @@ const getEmailSubjectAndContent = async (
   params: EmailParams
 ) => {
   let subject = "";
-  let html = "";
+  let renderItem = null;
   const { name, code } = params;
 
   switch (key) {
     case "verification":
       subject = "Email Verification";
-      html = await render(
-        <Verification verificationCode={code} name={name} />,
-        {
-          pretty: true,
-        }
-      );
+      renderItem = <Verification verificationCode={code} name={name} />;
+      break;
+    case "welcome":
+      subject = "Welcome to Budget Buddy";
+      renderItem = <WelcomeEmail name={name} />;
       break;
   }
+  if (!renderItem) return { subject, html: "" };
+
+  const html = await render(renderItem, {
+    pretty: true,
+  });
 
   return {
     subject,

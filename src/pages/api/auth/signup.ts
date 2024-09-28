@@ -50,6 +50,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     code: code,
   });
 
+  await email.send("welcome", {
+    to: user.email,
+    name: user.name,
+  });
+
   if (user) {
     return res
       .status(200)
