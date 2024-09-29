@@ -9,7 +9,7 @@ const sendEmail = async (to: string, subject: string, content: string) => {
 
   const raw = JSON.stringify({
     to: to,
-    subject: Buffer.from(subject).toString("base64"),
+    subject: subject,
     htmlBody: Buffer.from(content).toString("base64"),
     selectedAccount: ACCOUNT,
   });
