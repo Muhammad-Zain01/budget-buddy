@@ -1,6 +1,7 @@
 <br />
 <div align="center">
 <img src="https://github.com/Muhammad-Zain01/budget-buddy/blob/main/public/logo.png?raw=true" style="background:white;width: 220px;" />
+
 <h3 align="center">Budget Buddy</h3>
 <div>
     <a href="https://github.com/muhammad-zain01/budget-buddy/graphs/contributors"><img src="https://img.shields.io/github/contributors/muhammad-zain01/budget-buddy.svg?style=for-the-badge" /></a>
