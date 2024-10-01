@@ -148,6 +148,7 @@ const AccountSetting = () => {
                       <FormControl>
                         <ProfileSelector
                           onChange={(file) => field.onChange(file)}
+                          // @ts-ignore
                           value={field.value}
                         />
                       </FormControl>
