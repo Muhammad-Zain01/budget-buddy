@@ -48,6 +48,8 @@ export default async function handler(
       }
       const newHashedPassword = await HashPassword(body?.newPassword);
       user.updateUser(userId, { password: newHashedPassword });
+    } else if (body.image) {
+      user.updateUser(userId, { profileImage: body.image });
     } else if (body?.currency) {
       user.updateUser(userId, { currency: body?.currency });
     } else if (body.name) {

@@ -109,7 +109,12 @@ const user = {
   },
   updateUser: async (
     userId: number,
-    data: { currency?: string; password?: string; name?: string }
+    data: {
+      currency?: string;
+      password?: string;
+      profileImage?: string;
+      name?: string;
+    }
   ) => {
     return await prisma.user.update({
       where: {

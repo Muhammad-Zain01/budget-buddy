@@ -26,14 +26,13 @@ import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/use-toast";
 import { user as userService } from "@/lib/services/user";
 import useCurrentUser from "@/hooks/api/useCurrentUser";
-
+import { uploadProfile } from "@/lib/services/upload";
+import ProfileSelector from "../ui/profile-selector";
 
 const AccountSetting = () => {
   const [loading, setLoading] = useState(false);
-
   const { status } = useSession();
-  const { data } = useCurrentUser();
-
+  const { data, refetch } = useCurrentUser();
   const user = data?.data;
 
   const formSchema = z.object({
@@ -41,6 +40,10 @@ const AccountSetting = () => {
     email: z.string().email("Invalid email address"),
     currentPassword: z.string().optional(),
     newPassword: z.string().optional(),
+    image: z
+      .union([z.instanceof(File), z.string().url()])
+      .nullable()
+      .optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,6 +53,7 @@ const AccountSetting = () => {
       email: "",
       currentPassword: "",
       newPassword: "",
+      image: user?.profileImage,
     },
   });
 
@@ -81,6 +85,12 @@ const AccountSetting = () => {
       });
     }
 
+    if (values.image) {
+      const fileId = await uploadProfile(values.image);
+      // @ts-ignore
+      values.image = fileId;
+    }
+
     setLoading(true);
     try {
       await userService.updateUser({
@@ -91,11 +101,13 @@ const AccountSetting = () => {
               newPassword: values.newPassword,
             }
           : {}),
+        ...(values.image ? { image: values.image } : {}),
       });
       toast({
         title: "Success",
         description: "Your account information has been updated.",
       });
+      refetch();
     } catch (error) {
       console.error(error);
       toast({
@@ -127,6 +139,22 @@ const AccountSetting = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Profile</FormLabel>
+                      <FormControl>
+                        <ProfileSelector
+                          onChange={(file) => field.onChange(file)}
+                          value={field.value}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="name"
