@@ -62,7 +62,7 @@ const ProfileSelector: React.FC<AvatarSelectorProps> = ({
     onChange(null);
     await handleDelete();
   };
-
+  console.log(value);
   return (
     <div className="w-full relative">
       <div

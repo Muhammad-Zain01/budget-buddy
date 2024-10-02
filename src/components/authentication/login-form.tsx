@@ -128,6 +128,11 @@ const LoginForm = () => {
               )}
             />
           </div>
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
           <Button
             type="submit"
             className="w-full py-2 text-white bg-primary hover:bg-primary-dark transition duration-300"

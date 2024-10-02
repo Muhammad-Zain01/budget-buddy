@@ -123,6 +123,36 @@ const user = {
       data: data,
     });
   },
+  updateToken: async (
+    user_id: number,
+    token: string,
+    expirationTime: Date
+  ) => {
+    return await prisma.user.update({
+      where: { id: user_id },
+      data: { securityToken: token, tokenCreatedOn: expirationTime },
+    });
+  },
+  getUserByToken: async (token: string) => {
+    const user = await prisma.user.findFirst({
+      where: {
+        securityToken: token,
+        tokenCreatedOn: {
+          gte: new Date(Date.now() - 2 * 60 * 60 * 1000) // Token valid for 2 hours
+        }
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        username: true,
+        profileImage: true,
+        isVerfied: true
+      }
+    });
+
+    return user;
+  }
 };
 
 export default user;

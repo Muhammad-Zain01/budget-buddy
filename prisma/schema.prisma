@@ -19,6 +19,8 @@ model User {
   status           Boolean?      @default(true)
   currency         String?       @default("₨") @db.VarChar(10)
   createdAt        DateTime?     @default(now())
+  securityToken    String?       @db.VarChar(255)
+  tokenCreatedOn   DateTime?
   Category         Category[]
   Account          Account[]
   Transaction      Transaction[]

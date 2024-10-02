@@ -66,4 +66,42 @@ export const user = {
       throw error;
     }
   },
+  forgotPassword: async (email: string) => {
+    try {
+      const res = await request("/api/auth/send-link", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || errors.SERVER_ERROR);
+      }
+      return result;
+    } catch (error) {
+      console.error("Error sending forgot password email:", error);
+      throw error;
+    }
+  },
+  resetPassword: async (token: string, password: string) => {
+    try {
+      const res = await request("/api/auth/reset-password", {
+        method: "POST",
+        body: JSON.stringify({ token, password: password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || errors.SERVER_ERROR);
+      }
+      return result;
+    } catch (error) {
+      console.error("Error verifying reset token:", error);
+      throw error;
+    }
+  },
 };

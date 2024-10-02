@@ -2,13 +2,15 @@ import { render } from "@react-email/components";
 import sendEmail from "./email";
 import Verification from "@/email/verification";
 import WelcomeEmail from "@/email/welcome";
+import ForgotPasswordEmail from "@/email/forgot-password";
 
-type EmailType = "verification" | "welcome";
+type EmailType = "verification" | "welcome" | "forgot-password";
 
 type EmailParams = {
   to: string;
   name?: string;
   code?: string;
+  link?: string;
 };
 
 const getEmailSubjectAndContent = async (
@@ -17,7 +19,7 @@ const getEmailSubjectAndContent = async (
 ) => {
   let subject = "";
   let renderItem = null;
-  const { name, code } = params;
+  const { name, code, link } = params;
 
   switch (key) {
     case "verification":
@@ -27,6 +29,10 @@ const getEmailSubjectAndContent = async (
     case "welcome":
       subject = "Welcome to Budget Buddy";
       renderItem = <WelcomeEmail name={name} />;
+      break;
+    case "forgot-password":
+      subject = "Reset Your Budget Buddy Password";
+      renderItem = <ForgotPasswordEmail name={name} resetLink={link} />;
       break;
   }
   if (!renderItem) return { subject, html: "" };
