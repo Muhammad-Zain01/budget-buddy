@@ -43,6 +43,7 @@ const ForgotPasswordForm = () => {
         title: "Password Reset Email Sent",
         description: "Please check your email for further instructions.",
       });
+      form.reset();
     } catch (error) {
       console.error("Password reset error:", error);
       toast({
