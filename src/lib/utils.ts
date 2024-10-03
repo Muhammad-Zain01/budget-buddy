@@ -69,7 +69,7 @@ export const getMonthDateRange = (
 
 export const generateVerificationCode = (): string => {
   const codeLength = 6;
-  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const characters = '0123456789';
   let code = '';
 
   for (let i = 0; i < codeLength; i++) {
