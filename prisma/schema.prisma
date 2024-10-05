@@ -24,7 +24,7 @@ model User {
   Category         Category[]
   Account          Account[]
   Transaction      Transaction[]
-  Goal             Goal[]
+  budgets          Budget[]      @relation("UserBudgets")
 }
 
 model Category {
@@ -38,7 +38,7 @@ model Category {
   addedBy      User?         @relation(fields: [userId], references: [id])
   userId       Int?
   Transaction  Transaction[]
-  Goal         Goal[]
+  budgets      Budget[]      @relation("CategoryBudgets") // Add this line
 }
 
 model Account {
@@ -72,29 +72,16 @@ model Transaction {
   toAccount   Account?        @relation("ToAccount", fields: [toId], references: [id])
 }
 
-model Goal {
-  id            Int       @id @default(autoincrement())
-  type          GoalTypes
-  name          String    @db.VarChar(100)
-  description   String
-  targetAmount  Float
-  currentAmount Float
-  fromDate      DateTime
-  toDate        DateTime
-  isAchieved    Boolean
-  isRecuring    Boolean
-  recuringFrom  DateTime
-  recuringTo    DateTime
-  createdAt     DateTime  @default(now())
-  category      Category  @relation(fields: [categoryId], references: [id])
-  addedBy       User      @relation(fields: [userId], references: [id])
-  categoryId    Int
-  userId        Int
-}
-
-enum GoalTypes {
-  SAVINGS
-  BUDGET
+model Budget {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  amount      Float
+  isRecurring Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  userId      Int
+  categoryId  Int
+  addedBy     User     @relation("UserBudgets", fields: [userId], references: [id])
+  category    Category @relation("CategoryBudgets", fields: [categoryId], references: [id]) // Update this line
 }
 
 enum TransactionType {

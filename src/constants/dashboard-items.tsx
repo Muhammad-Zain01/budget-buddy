@@ -6,6 +6,7 @@ import {
   PieChart,
   Settings,
   Wallet,
+  WalletMinimal,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -35,6 +36,11 @@ export const DashboardItems: DashboardItemType[] = [
     key: "transactions",
     title: "Transactions",
     Icon: <ArrowLeftRight />,
+  },
+  {
+    key: "budget",
+    title: "Budgets",
+    Icon: <WalletMinimal />,
   },
   {
     key: "settings",

@@ -1,22 +1,10 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { CheckCircledIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { DashboardItems, DashboardItemType } from "@/constants/dashboard-items";
 import SidbarItem from "./sidebar-item";
-import { Drawer } from "vaul";
 import useResponsive from "@/hooks/useResponsive";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
-import { HamIcon, Menu } from "lucide-react";
 
 const SidebarWrapper = () => {
   const { isTablet } = useResponsive();

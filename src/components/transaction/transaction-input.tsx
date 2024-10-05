@@ -2,10 +2,16 @@ import { Calculator } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import CalculatorModal from "../calculator-modal";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import CurrencyView from "../ui/currency-view";
 
-const TransactionInput = ({ form }: { form: any }) => {
+const TransactionInput = ({ label, form }: { label?: string; form: any }) => {
   const [calculatorModal, setCalculatorModal] = useState(false);
   return (
     <>
@@ -14,6 +20,7 @@ const TransactionInput = ({ form }: { form: any }) => {
         name="amount"
         render={({ field }) => (
           <FormItem>
+            {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
               <div className="flex items-center pl-3 pr-2 gap-2 border rounded-md">
                 <span className="font-[400]">
